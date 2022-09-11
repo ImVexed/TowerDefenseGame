@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Cannon2.png-e8aa5e6c7bff811371505990de8a6bbe.stex"
+path="res://.import/Cannon3.png-1b392f10f6f8380c576b8ba0bda604f8.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://turrets/Cannon2.png"
-dest_files=[ "res://.import/Cannon2.png-e8aa5e6c7bff811371505990de8a6bbe.stex" ]
+source_file="res://assets/turrets/Cannon3.png"
+dest_files=[ "res://.import/Cannon3.png-1b392f10f6f8380c576b8ba0bda604f8.stex" ]
 
 [params]
 

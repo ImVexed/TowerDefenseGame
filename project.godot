@@ -10,7 +10,7 @@ config_version=4
 
 [application]
 
-config/name="Navigation Polygon 2D"
+config/name="TowerDefenseGame"
 config/description="Example of using 2D navigation using a NavigationPolygon in a
 NavigationPolygonInstance node. It uses the 2D navigation API to request
 a path between two points, and then traverses the resulting path."

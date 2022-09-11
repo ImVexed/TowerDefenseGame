@@ -66,7 +66,7 @@ public class Character : Sprite
 
 	public void MoveTo(Vector2 pos)
 	{
-		Path = GetParent<Navigation2D>().GetSimplePath(GlobalPosition, pos)[1..];
+		Path = GetParent<Navigation2D>().GetSimplePath(GlobalPosition, pos, false)[1..];
 		SetProcess(true);
 	}
 	

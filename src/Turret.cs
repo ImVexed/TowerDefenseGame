@@ -6,12 +6,12 @@ using System.Linq;
 
 public class Turret : Sprite
 {
-    [Export] float Cooldown = 100;
-    [Export] float Damage = 10;
-    
+	[Export] float Cooldown = 100;
+	[Export] float Damage = 10;
+	
 	List<Sprite> Targets = new List<Sprite>();
 	Sprite? Target;
-    DateTime LastFire = DateTime.Now;
+	DateTime LastFire = DateTime.Now;
 
 
 

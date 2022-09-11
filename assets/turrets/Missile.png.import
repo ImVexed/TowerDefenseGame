@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Bullet_MG.png-9f18419d0f7d671655bcc026ad5fcf1d.stex"
+path="res://.import/Missile.png-59484493cfda6bd7bf5cd968eb5d314c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://turrets/Bullet_MG.png"
-dest_files=[ "res://.import/Bullet_MG.png-9f18419d0f7d671655bcc026ad5fcf1d.stex" ]
+source_file="res://assets/turrets/Missile.png"
+dest_files=[ "res://.import/Missile.png-59484493cfda6bd7bf5cd968eb5d314c.stex" ]
 
 [params]
 
