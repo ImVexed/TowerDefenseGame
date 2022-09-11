@@ -19,7 +19,9 @@ config/icon="res://assets/icon.png"
 
 [display]
 
-window/size/width=800
+window/size/width=1000
+window/size/height=1000
+window/size/resizable=false
 window/dpi/allow_hidpi=true
 window/stretch/mode="2d"
 window/stretch/aspect="expand"
@@ -40,6 +42,8 @@ click={
 
 [rendering]
 
+threads/thread_model=2
+threads/thread_safe_bvh=true
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
 environment/default_clear_color=Color( 0.160784, 0.172549, 0.278431, 1 )

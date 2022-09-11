@@ -21,7 +21,7 @@ public class level : Navigation2D
 		{
 			var c = new Character
 			{
-				Position = new Vector2(230, 150),
+				Position = new Vector2(944, 440),
 				Texture = ResourceLoader.Load<Texture>("res://assets/character.png"),
 				Scale = new Vector2(0.5f, 0.5f)
 				
@@ -41,7 +41,7 @@ public class level : Navigation2D
 			c.AddChild(col);
 
 			AddChild(c);
-			c.MoveTo(new Vector2(500, 450));
+			c.MoveTo(new Vector2(1010, 500));
 			// 500, 450
 			LastSpawn = DateTime.Now;
 		}
