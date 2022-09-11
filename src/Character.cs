@@ -7,7 +7,7 @@ public class Character : Sprite
 {
 	private readonly Font Font = new DynamicFont
 	{
-		FontData = ResourceLoader.Load<DynamicFontData>("res://Roboto-Regular.ttf")
+		FontData = ResourceLoader.Load<DynamicFontData>("res://assets/Roboto-Regular.ttf")
 	};
 
 	[Export] float Health = 100;

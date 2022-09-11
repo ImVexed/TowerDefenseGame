@@ -22,7 +22,7 @@ public class level : Navigation2D
 			var c = new Character
 			{
 				Position = new Vector2(230, 150),
-				Texture = ResourceLoader.Load<Texture>("res://character.png"),
+				Texture = ResourceLoader.Load<Texture>("res://assets/character.png"),
 				Scale = new Vector2(0.5f, 0.5f)
 				
 			};
