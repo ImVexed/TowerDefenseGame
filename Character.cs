@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Linq;
+#nullable enable
 
 public class Character : Sprite
 {
@@ -27,9 +28,9 @@ public class Character : Sprite
 	{
 		Health -= damage;
 		
-		if (Health <=0) {
+		if (Health <=0)
 			QueueFree();
-		}
+		
 		Update();
 	}
 

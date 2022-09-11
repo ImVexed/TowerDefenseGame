@@ -2,13 +2,16 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+#nullable enable
 
 public class Turret : Sprite
 {
+    [Export] float Cooldown = 100;
+    [Export] float Damage = 10;
+    
 	List<Sprite> Targets = new List<Sprite>();
 	Sprite? Target;
-	float Cooldown = 100;
-	DateTime LastFire = DateTime.Now;
+    DateTime LastFire = DateTime.Now;
 
 
 
@@ -24,13 +27,10 @@ public class Turret : Sprite
 	{
 		UpdateTarget();
 		
-		if (Target != null)
+		if (Target != null && LastFire.AddMilliseconds(Cooldown) < DateTime.Now)
 		{
-			if (LastFire.AddMilliseconds(Cooldown) < DateTime.Now)
-			{
-				LastFire = DateTime.Now;
-				Target.EmitSignal("take_damage", 10);
-			}
+			LastFire = DateTime.Now;
+			Target.EmitSignal("take_damage", Damage);
 		}
 
 		Update();
@@ -39,15 +39,12 @@ public class Turret : Sprite
 	public override void _Draw()
 	{
 		if (Target != null)
-		{
-			DrawLine(new Vector2(0,0), Target.Position - Position, Color.Color8(255, 0, 0));
-		}
+			DrawLine(new Vector2(0,0), Target.Position - Position, Color.Color8(255, 0, 0));	
 	}
 
 	private void _on_Area2D_body_entered(Area2D body)
 	{
 		Targets.Add(body.GetParent<Sprite>());
-	
 	}
 	
 	private void _on_Area2D_body_exited(Area2D body)
@@ -55,9 +52,8 @@ public class Turret : Sprite
 		var s = body.GetParent<Sprite>();
 
 		if (s == Target)
-		{
 			Target = null;
-		}
+
 
 		Targets.Remove(s);
 	}
@@ -65,19 +61,15 @@ public class Turret : Sprite
 	private void UpdateTarget()
 	{
 		if (Targets.Count == 0)
-		{
 			return;
-		}
+
 
 		var closestTarget = Targets.First();
 
 		foreach (var target in Targets)
-		{
 			if (Position.DistanceTo(target.Position) < Position.DistanceTo(closestTarget.Position))
-			{
 				closestTarget = target;
-			}
-		}
+
 		Target = closestTarget;
 	}
 }
