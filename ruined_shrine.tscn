@@ -1,0 +1,35 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/circle.jpg" type="Texture" id=1]
+[ext_resource path="res://src/ruined_shrine.cs" type="Script" id=2]
+[ext_resource path="res://turret.tscn" type="PackedScene" id=3]
+
+[sub_resource type="NavigationPolygon" id=1]
+vertices = PoolVector2Array( 1087, 506, 1147, 500, 1173, 506, 1157, 535, 1101, 551, 1033, 548, 1031, 506, 999, 529, 1004, 459, 978, 473, 984, 445, 935, 440, 936, 426, 867, 418, 896, 439, 847, 432, 881, 462, 835, 464, 832, 501, 876, 497, 839, 546, 820, 581, 884, 546, 870, 596, 819, 638, 983, 396, 1127, 398, 1128, 422, 1101, 428, 1058, 426, 1007, 421, 967, 415, 888, 369, 928, 408, 888, 397, 857, 380, 837, 285, 835, 365, 814, 350, 797, 321, 794, 251, 768, 295, 719, 220, 668, 193, 720, 269, 681, 246, 630, 212, 610, 157, 590, 189, 554, 138, 544, 176, 494, 128, 503, 171, 457, 181, 428, 129, 409, 193, 359, 168, 377, 209, 313, 203, 332, 242, 265, 237, 208, 273, 285, 277, 243, 306, 177, 298, 205, 334, 141, 329, 111, 368, 191, 368, 137, 407, 194, 427, 201, 379, 228, 464, 240, 390, 265, 430, 264, 496, 232, 517, 261, 550, 225, 557, 256, 602, 209, 666, 211, 631, 215, 596, 262, 657, 212, 705, 224, 738, 285, 717, 251, 781, 318, 750, 309, 828, 376, 782, 361, 847, 418, 800, 433, 852, 454, 803, 489, 842, 505, 796, 566, 836, 560, 781, 624, 813, 600, 766, 679, 734, 679, 784, 741, 754, 719, 707, 775, 729, 752, 674, 796, 684, 771, 649, 792, 616, 893, 585 )
+polygons = [ PoolIntArray( 0, 1, 2, 3, 4, 5 ), PoolIntArray( 6, 0, 5, 7 ), PoolIntArray( 8, 6, 7, 9, 10 ), PoolIntArray( 10, 9, 11, 12 ), PoolIntArray( 13, 12, 11, 14 ), PoolIntArray( 15, 13, 14, 16, 17 ), PoolIntArray( 18, 17, 16, 19, 20 ), PoolIntArray( 21, 20, 19, 22, 23, 24 ), PoolIntArray( 25, 26, 27, 28, 29, 30, 31 ), PoolIntArray( 32, 25, 31, 33, 34, 35 ), PoolIntArray( 36, 32, 35, 37, 38, 39, 40 ), PoolIntArray( 40, 39, 41, 42 ), PoolIntArray( 43, 42, 41, 44, 45, 46 ), PoolIntArray( 47, 43, 46, 48, 49 ), PoolIntArray( 49, 48, 50, 51 ), PoolIntArray( 51, 50, 52 ), PoolIntArray( 51, 52, 53, 54 ), PoolIntArray( 54, 53, 55, 56 ), PoolIntArray( 56, 55, 57, 58 ), PoolIntArray( 58, 57, 59, 60 ), PoolIntArray( 61, 60, 59, 62, 63 ), PoolIntArray( 64, 61, 63, 65, 66 ), PoolIntArray( 67, 66, 65, 68, 69 ), PoolIntArray( 70, 69, 68, 71 ), PoolIntArray( 72, 70, 71, 73, 74, 75 ), PoolIntArray( 76, 72, 75, 77 ), PoolIntArray( 78, 76, 77, 79 ), PoolIntArray( 80, 81, 82, 78, 79, 83, 84 ), PoolIntArray( 85, 84, 83, 86, 87 ), PoolIntArray( 87, 86, 88, 89 ), PoolIntArray( 89, 88, 90, 91 ), PoolIntArray( 91, 90, 92, 93 ), PoolIntArray( 93, 92, 94, 95 ), PoolIntArray( 95, 94, 96, 97 ), PoolIntArray( 97, 96, 98, 99 ), PoolIntArray( 99, 98, 100 ), PoolIntArray( 99, 100, 101, 102 ), PoolIntArray( 103, 102, 101, 104, 105 ), PoolIntArray( 105, 104, 106, 107 ), PoolIntArray( 107, 106, 108, 24 ), PoolIntArray( 24, 108, 109, 21 ), PoolIntArray( 23, 22, 110 ) ]
+outlines = [ PoolVector2Array( 1127, 398, 983, 396, 888, 369, 837, 285, 794, 251, 719, 220, 668, 193, 610, 157, 554, 138, 494, 128, 428, 129, 359, 168, 313, 203, 265, 237, 208, 273, 177, 298, 141, 329, 111, 368, 137, 407, 194, 427, 228, 464, 232, 517, 225, 557, 215, 596, 211, 631, 209, 666, 212, 705, 224, 738, 251, 781, 309, 828, 361, 847, 433, 852, 489, 842, 566, 836, 624, 813, 679, 784, 741, 754, 775, 729, 796, 684, 819, 638, 870, 596, 893, 585, 884, 546, 876, 497, 881, 462, 896, 439, 935, 440, 978, 473, 999, 529, 1033, 548, 1101, 551, 1157, 535, 1173, 506, 1147, 500, 1087, 506, 1031, 506, 1004, 459, 984, 445, 936, 426, 867, 418, 847, 432, 835, 464, 832, 501, 839, 546, 820, 581, 792, 616, 771, 649, 752, 674, 719, 707, 679, 734, 600, 766, 560, 781, 505, 796, 454, 803, 418, 800, 376, 782, 318, 750, 285, 717, 262, 657, 256, 602, 261, 550, 264, 496, 265, 430, 240, 390, 201, 379, 191, 368, 205, 334, 243, 306, 285, 277, 332, 242, 377, 209, 409, 193, 457, 181, 503, 171, 544, 176, 590, 189, 630, 212, 681, 246, 720, 269, 768, 295, 797, 321, 814, 350, 835, 365, 857, 380, 888, 397, 928, 408, 967, 415, 1007, 421, 1058, 426, 1101, 428, 1128, 422 ) ]
+
+[node name="ruined_shrine" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="background" type="Sprite" parent="."]
+position = Vector2( 500, 500 )
+scale = Vector2( 0.600962, 0.600962 )
+texture = ExtResource( 1 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 500, 500 )
+
+[node name="NavigationPolygonInstance" type="NavigationPolygonInstance" parent="."]
+navpoly = SubResource( 1 )
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="Start Point" type="Node2D" parent="."]
+position = Vector2( 1098, 415 )
+
+[node name="End Point" type="Node2D" parent="."]
+position = Vector2( 1109, 529 )
+
+[node name="Simple Turret" parent="." instance=ExtResource( 3 )]
+position = Vector2( 795, 431 )

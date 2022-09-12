@@ -2,15 +2,17 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+
 #nullable enable
 
-public class Turret : Sprite
+public class Turret : Node2D
 {
-	[Export] float Cooldown = 100;
+	[Export] float Cooldown = 200;
 	[Export] float Damage = 10;
 	
-	List<Sprite> Targets = new List<Sprite>();
-	Sprite? Target;
+	List<creep> Targets = new();
+	creep? Target;
 	DateTime LastFire = DateTime.Now;
 
 
@@ -18,9 +20,9 @@ public class Turret : Sprite
 	public override void _Ready()
 	{
 		var area = GetNode<Area2D>("Area2D");
-		GD.Print(area);
-		area.Connect("area_entered", this,"_on_Area2D_body_entered");
-		area.Connect("area_exited", this, "_on_Area2D_body_exited");
+
+		area.Connect("body_entered", this,"BodyEntered");
+		area.Connect("body_exited", this, "BodyExited");
 	}
 
 	public override void _Process(float delta)
@@ -30,7 +32,7 @@ public class Turret : Sprite
 		if (Target != null && LastFire.AddMilliseconds(Cooldown) < DateTime.Now)
 		{
 			LastFire = DateTime.Now;
-			Target.EmitSignal("take_damage", Damage);
+			Target.TakeDamage(Damage + (int)GD.RandRange(0, 20));
 		}
 
 		Update();
@@ -42,14 +44,20 @@ public class Turret : Sprite
 			DrawLine(new Vector2(0,0), Target.Position - Position, Color.Color8(255, 0, 0));	
 	}
 
-	private void _on_Area2D_body_entered(Area2D body)
+	private void BodyEntered(Node body)
 	{
-		Targets.Add(body.GetParent<Sprite>());
+		if (body is not creep)
+			return;
+		
+		Targets.Add((creep)body);
 	}
 	
-	private void _on_Area2D_body_exited(Area2D body)
+	private void BodyExited(Node body)
 	{
-		var s = body.GetParent<Sprite>();
+		if (body is not creep)
+			return;
+		
+		var s = (creep)body;
 
 		if (s == Target)
 			Target = null;

@@ -14,7 +14,7 @@ config/name="TowerDefenseGame"
 config/description="Example of using 2D navigation using a NavigationPolygon in a
 NavigationPolygonInstance node. It uses the 2D navigation API to request
 a path between two points, and then traverses the resulting path."
-run/main_scene="res://level.tscn"
+run/main_scene="res://ruined_shrine.tscn"
 config/icon="res://assets/icon.png"
 
 [display]
@@ -32,6 +32,10 @@ stretch/mode="2d"
 
 singletons=[  ]
 
+[global]
+
+layer=false
+
 [input]
 
 click={
@@ -39,6 +43,11 @@ click={
 "events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
  ]
 }
+
+[layer_names]
+
+2d_physics/layer_1="creep"
+2d_physics/layer_2="turret radius"
 
 [rendering]
 
