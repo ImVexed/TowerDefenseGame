@@ -32,7 +32,7 @@ public class Turret : Node2D
 		if (Target != null && LastFire.AddMilliseconds(Cooldown) < DateTime.Now)
 		{
 			LastFire = DateTime.Now;
-			Target.TakeDamage(Damage + (int)GD.RandRange(0, 20));
+			Target.TakeDamage(Damage + (int)GD.RandRange(0, 100));
 		}
 
 		Update();

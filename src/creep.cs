@@ -69,6 +69,7 @@ public class creep : KinematicBody2D
 
 		var dmg = DamageText.Instance<damage_number>();
 		dmg.Ammount = damage;
+		dmg.Type = damage_number.DamageType.Void;
 
 		AddChild(dmg);
 		Update();
