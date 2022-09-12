@@ -6,7 +6,7 @@ public class damage_number : Position2D
 	Label label;
 	Tween tween;
 
-	[Export] public float Ammount = 0;
+	[Export] public float Amount = 0;
 	[Export] public DamageType Type;
 
 	Vector2 velocity = Vector2.Zero;
@@ -47,12 +47,12 @@ public class damage_number : Position2D
 		label = GetNode<Label>("Label");
 		tween = GetNode<Tween>("Tween");
 
-		label.Text = Ammount.ToString();
+		label.Text = Amount.ToString();
 
 		velocity -= new Vector2((float)GD.RandRange(0, 50), 50);
 
 		// Find the highest damage magnitude we surpass
-		var mag = Magnitudes.Last(x => Ammount > x.Breakpoint);
+		var mag = Magnitudes.Last(x => Amount > x.Breakpoint);
 
 		label.AddColorOverride("font_color", DamageColors[Type]);
 
