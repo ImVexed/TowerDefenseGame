@@ -14,7 +14,7 @@ config/name="TowerDefenseGame"
 config/description="Example of using 2D navigation using a NavigationPolygon in a
 NavigationPolygonInstance node. It uses the 2D navigation API to request
 a path between two points, and then traverses the resulting path."
-run/main_scene="res://ruined_shrine.tscn"
+run/main_scene="res://root_scene.tscn"
 config/icon="res://assets/icon.png"
 
 [display]

@@ -19,7 +19,7 @@ public class creep : KinematicBody2D
 
 	Label HealthBar;
 	
-	PackedScene DamageText = ResourceLoader.Load<PackedScene>("res://damage_number.tscn");
+	PackedScene DamageText = ResourceLoader.Load<PackedScene>("res://scenes/gui/damage_number.tscn");
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()

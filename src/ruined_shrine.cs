@@ -22,7 +22,7 @@ public class ruined_shrine : Node2D
 	{
 		if (LastSpawn.AddMilliseconds(GD.RandRange(SpawnRate, SpawnRate+(SpawnRate*0.25))) < DateTime.Now)
 		{
-			var creepBase = ResourceLoader.Load<PackedScene>("res://creep.tscn");
+			var creepBase = ResourceLoader.Load<PackedScene>("res://scenes/entities/creep.tscn");
 			var newCreep = creepBase.Instance<creep>();
 
 			AddChild(newCreep);
