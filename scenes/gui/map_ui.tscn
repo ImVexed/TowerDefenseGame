@@ -4,7 +4,7 @@
 [ext_resource path="res://assets/gui/lifebar/lifebar_content.png" type="Texture" id=2]
 [ext_resource path="res://assets/gui/lifebar/lifebar_back.png" type="Texture" id=3]
 
-[node name="Control" type="Control"]
+[node name="BaseUI" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 
@@ -27,7 +27,7 @@ margin_bottom = 22.0
 margin_right = 84.0
 margin_bottom = 22.0
 
-[node name="TextureProgress" type="TextureProgress" parent="Top Bar/Bars/HP"]
+[node name="HPBar" type="TextureProgress" parent="Top Bar/Bars/HP"]
 margin_right = 84.0
 margin_bottom = 22.0
 value = 100.0

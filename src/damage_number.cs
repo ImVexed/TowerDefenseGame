@@ -59,10 +59,11 @@ public class damage_number : Position2D
 		// Scale up to full size in 0.2 seconds, then after 100ms scale back down to 0.1
 		tween.InterpolateProperty(this, "scale", Scale, new Vector2(mag.Scale, mag.Scale), 0.2f, Tween.TransitionType.Linear, Tween.EaseType.Out);
 		tween.InterpolateProperty(this, "scale", new Vector2(mag.Scale, mag.Scale), new Vector2(0.1f, 0.1f), 0.7f, Tween.TransitionType.Linear, Tween.EaseType.Out, 0.3f);
+		tween.Connect("tween_all_completed", this, "TweenAllCompleted");
 		tween.Start();
 	}
 
-	public void TweenCompleted()
+	public void TweenAllCompleted()
 	{
 		QueueFree();
 	}

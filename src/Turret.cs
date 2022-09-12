@@ -8,7 +8,7 @@ using System.Reflection;
 
 public class Turret : Node2D
 {
-	[Export] float Cooldown = 200;
+	[Export] float Cooldown = 1000;
 	[Export] float Damage = 10;
 	
 	List<creep> Targets = new();
@@ -32,7 +32,7 @@ public class Turret : Node2D
 		if (Target != null && LastFire.AddMilliseconds(Cooldown) < DateTime.Now)
 		{
 			LastFire = DateTime.Now;
-			Target.TakeDamage(Damage + (int)GD.RandRange(0, 100));
+			Target.TakeDamage(Damage + (int)GD.RandRange(0, 10));
 		}
 
 		Update();

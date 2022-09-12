@@ -9,6 +9,9 @@ public class creep : KinematicBody2D
 	[Export] bool NavAvoidance = true;
 	[Export] bool NavOptimize = false;
 
+	[Signal]
+	public delegate void navigation_finished();
+
 	Vector2 Velocity = Vector2.Zero;
 	NavigationAgent2D nav;
 
@@ -18,7 +21,7 @@ public class creep : KinematicBody2D
 	Vector2[]? NavPath;
 
 	Label HealthBar;
-	
+
 	PackedScene DamageText = ResourceLoader.Load<PackedScene>("res://scenes/gui/damage_number.tscn");
 
 	// Called when the node enters the scene tree for the first time.
@@ -26,9 +29,9 @@ public class creep : KinematicBody2D
 	{
 		HealthBar = GetNode<Label>("Health");
 		nav = GetNode<NavigationAgent2D>("NavigationAgent2D");
-		// TODO: nav.Connect("path_changed", this, "PathChanged"); 
-		// TODO: nav.Connect("target_reached", this, "TargetReached");
-		// TODO: nav.Connect("navigation_finished", this, "NavigationFinished");
+	// TODO: nav.Connect("path_changed", this, "PathChanged"); 
+	// TODO: nav.Connect("target_reached", this, "TargetReached");
+		nav.Connect("navigation_finished", this, "NavigationFinished");
 		nav.Connect("velocity_computed", this, "VelocityComputed");
 		nav.MaxSpeed = MovementMultiplier;
 		nav.Radius = NavRadius;
@@ -58,6 +61,11 @@ public class creep : KinematicBody2D
 		nav.SetTargetLocation(pos);
 
 		NavPath = Navigation2DServer.MapGetPath(nav.GetNavigationMap(), GlobalPosition, pos, NavOptimize);
+	}
+
+	public void NavigationFinished()
+	{
+		EmitSignal("navigation_finished");
 	}
 
 	public void TakeDamage(float damage)
