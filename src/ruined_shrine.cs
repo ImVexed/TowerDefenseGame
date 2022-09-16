@@ -16,6 +16,7 @@ public class ruined_shrine : Node2D
 
 	TextureProgress HealthBar;
 	TextureButton BasicTowerButton;
+	Label FPSLabel;
 
 	bool ActivelyPlacingTower = false;
 	Turret? PlacementTower;
@@ -26,6 +27,7 @@ public class ruined_shrine : Node2D
 		StartPos = GetNode<Node2D>("Start Point").GlobalPosition;
 		EndPos = GetNode<Node2D>("End Point").GlobalPosition;
 		HealthBar = GetNode<TextureProgress>("../UI/HPBar");
+		FPSLabel = GetNode<Label>("../UI/FPS");
 		BasicTowerButton = GetNode<TextureButton>("../UI/BasicTower");
 		BasicTowerButton.Connect("pressed", this, "TowerButtonPressed");
 	}
@@ -58,7 +60,7 @@ public class ruined_shrine : Node2D
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(float delta)
 	{
-
+		FPSLabel.Text = $"{Engine.GetFramesPerSecond()} FPS";
 		if (!GameOver && LastSpawn.AddMilliseconds(GD.RandRange(SpawnRate, SpawnRate + (SpawnRate * 0.25))) < DateTime.Now)
 		{
 			var newCreep = CreepBase.Instance<creep>();
