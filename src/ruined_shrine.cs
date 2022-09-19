@@ -8,12 +8,18 @@ public class ruined_shrine : Node2D
 	DateTime LastSpawn = DateTime.Now;
 
 	PackedScene GameOverScene = ResourceLoader.Load<PackedScene>("res://scenes/gui/game_over.tscn");
-
+	PackedScene CreepBase = ResourceLoader.Load<PackedScene>("res://scenes/entities/creep.tscn");
+	PackedScene TowerBase = ResourceLoader.Load<PackedScene>("res://scenes/entities/turret.tscn");
 	bool GameOver;
 	Vector2 StartPos;
 	Vector2 EndPos;
 
 	TextureProgress HealthBar;
+	TextureButton BasicTowerButton;
+	Label FPSLabel;
+
+	bool ActivelyPlacingTower = false;
+	Turret? PlacementTower;
 
 	Inventory Inventory;
 
@@ -24,18 +30,46 @@ public class ruined_shrine : Node2D
 	{
 		StartPos = GetNode<Node2D>("Start Point").GlobalPosition;
 		EndPos = GetNode<Node2D>("End Point").GlobalPosition;
-		HealthBar = GetNode<TextureProgress>("../UI/Top Bar/Bars/HP/HPBar");
 		Inventory = GetNode<Inventory>("../UI/Inventory");
+		HealthBar = GetNode<TextureProgress>("../UI/HPBar");
+		FPSLabel = GetNode<Label>("../UI/FPS");
+		BasicTowerButton = GetNode<TextureButton>("../UI/BasicTower");
+		BasicTowerButton.Connect("pressed", this, "TowerButtonPressed");
 	}
 
-	//  // Called every frame. 'delta' is the elapsed time since the previous frame.
+	public void TowerButtonPressed()
+	{
+		ActivelyPlacingTower = true;
+		PlacementTower = TowerBase.Instance<Turret>();
+		PlacementTower.Position = GetGlobalMousePosition();
+		AddChild(PlacementTower);
+	}
+
+	public override void _Input(InputEvent @event)
+	{
+		if (ActivelyPlacingTower)
+		{
+			if (@event is InputEventMouseButton eventMouseButton){
+				PlacementTower!.Position = eventMouseButton.Position;
+				PlacementTower.Update();
+				PlacementTower = null;
+				ActivelyPlacingTower = false;
+			}
+			else if (@event is InputEventMouseMotion eventMouseMotion){
+				PlacementTower!.Position = eventMouseMotion.Position;
+				PlacementTower.Update();
+			}
+		}
+	}
+
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(float delta)
 	{
-
+		FPSLabel.Text = $"{Engine.GetFramesPerSecond()} FPS";
 		if (!GameOver && LastSpawn.AddMilliseconds(GD.RandRange(SpawnRate, SpawnRate + (SpawnRate * 0.25))) < DateTime.Now)
 		{
 			var creepBase = ResourceLoader.Load<PackedScene>("res://scenes/entities/creep.tscn");
-			var newCreep = creepBase.Instance<Creep>();
+			var newCreep = CreepBase.Instance<creep>();
 			newCreep.Connect("navigation_finished", this, "CreepLeaked");
 
 			AddChild(newCreep);
@@ -63,7 +97,7 @@ public class ruined_shrine : Node2D
 			{
 				GameOver = true;
 				var go = GameOverScene.Instance<Label>();
-				go.SetPosition((GetViewportRect().Size/2)-(go.RectSize/2));
+				go.SetPosition((GetViewportRect().Size / 2) - (go.RectSize / 2));
 				AddChild(go);
 			}
 		}
