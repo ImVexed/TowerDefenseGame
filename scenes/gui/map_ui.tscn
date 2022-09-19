@@ -1,12 +1,19 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/gui/lifebar/lifebar_front.png" type="Texture" id=1]
 [ext_resource path="res://assets/gui/lifebar/lifebar_content.png" type="Texture" id=2]
 [ext_resource path="res://assets/gui/lifebar/lifebar_back.png" type="Texture" id=3]
+[ext_resource path="res://scenes/gui/Inventory.tscn" type="PackedScene" id=4]
 
 [node name="BaseUI" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+
+[node name="Inventory" parent="." instance=ExtResource( 4 )]
+margin_left = -304.5
+margin_top = -11.0
+margin_right = 304.5
+margin_bottom = 11.0
 
 [node name="Top Bar" type="MarginContainer" parent="."]
 margin_left = 5.0

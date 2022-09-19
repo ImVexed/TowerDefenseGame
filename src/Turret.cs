@@ -8,11 +8,11 @@ using System.Reflection;
 
 public class Turret : Node2D
 {
-	[Export] float Cooldown = 1000;
+	[Export] float Cooldown = 10;
 	[Export] float Damage = 10;
 	
-	List<creep> Targets = new();
-	creep? Target;
+	List<Creep> Targets = new();
+	Creep? Target;
 	DateTime LastFire = DateTime.Now;
 
 
@@ -46,18 +46,18 @@ public class Turret : Node2D
 
 	private void BodyEntered(Node body)
 	{
-		if (body is not creep)
+		if (body is not Creep)
 			return;
 		
-		Targets.Add((creep)body);
+		Targets.Add((Creep)body);
 	}
 	
 	private void BodyExited(Node body)
 	{
-		if (body is not creep)
+		if (body is not Creep)
 			return;
 		
-		var s = (creep)body;
+		var s = (Creep)body;
 
 		if (s == Target)
 			Target = null;

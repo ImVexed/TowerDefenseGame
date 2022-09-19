@@ -15,12 +15,17 @@ public class ruined_shrine : Node2D
 
 	TextureProgress HealthBar;
 
+	Inventory Inventory;
+
+	RandomNumberGenerator RNG = new();
+
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		StartPos = GetNode<Node2D>("Start Point").GlobalPosition;
 		EndPos = GetNode<Node2D>("End Point").GlobalPosition;
 		HealthBar = GetNode<TextureProgress>("../UI/Top Bar/Bars/HP/HPBar");
+		Inventory = GetNode<Inventory>("../UI/Inventory");
 	}
 
 	//  // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -30,7 +35,7 @@ public class ruined_shrine : Node2D
 		if (!GameOver && LastSpawn.AddMilliseconds(GD.RandRange(SpawnRate, SpawnRate + (SpawnRate * 0.25))) < DateTime.Now)
 		{
 			var creepBase = ResourceLoader.Load<PackedScene>("res://scenes/entities/creep.tscn");
-			var newCreep = creepBase.Instance<creep>();
+			var newCreep = creepBase.Instance<Creep>();
 			newCreep.Connect("navigation_finished", this, "CreepLeaked");
 
 			AddChild(newCreep);
@@ -41,6 +46,11 @@ public class ruined_shrine : Node2D
 			// 500, 450
 			LastSpawn = DateTime.Now;
 		}
+	}
+
+	public void CreepKilled(Creep creep)
+	{
+		Inventory.Gold += (int)((creep.Health / 10) * RNG.RandfRange(0.5f, 1.2f));
 	}
 
 	public void CreepLeaked()

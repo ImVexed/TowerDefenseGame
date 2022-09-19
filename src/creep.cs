@@ -1,9 +1,9 @@
 using Godot;
 using System;
 
-public class creep : KinematicBody2D
+public class Creep : KinematicBody2D
 {
-	[Export] float Health = 100;
+	[Export] public float Health = 100;
 	[Export] float MovementMultiplier = 100;
 	[Export] float NavRadius = 0;
 	[Export] bool NavAvoidance = true;
@@ -11,6 +11,9 @@ public class creep : KinematicBody2D
 
 	[Signal]
 	public delegate void navigation_finished();
+
+	[Signal]
+	public delegate void died(Creep creep);
 
 	Vector2 Velocity = Vector2.Zero;
 	NavigationAgent2D nav;
@@ -72,8 +75,11 @@ public class creep : KinematicBody2D
 	{
 		Health -= damage;
 
-		if (Health <= 0)
+		if (Health <= 0) {
 			QueueFree();
+			EmitSignal("died", this);
+			return;
+		}
 
 		var dmg = DamageText.Instance<damage_number>();
 		dmg.Amount = damage;

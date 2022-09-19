@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://src/creep.cs" type="Script" id=1]
+[ext_resource path="res://src/Creep.cs" type="Script" id=1]
 [ext_resource path="res://assets/character.png" type="Texture" id=2]
 [ext_resource path="res://assets/Roboto-Regular.ttf" type="DynamicFontData" id=3]
 
