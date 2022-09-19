@@ -1,9 +1,10 @@
 using Godot;
 using System;
 
-public class Creep : KinematicBody2D
+public class creep : KinematicBody2D
 {
-	[Export] public float Health = 100;
+	[Export] public float MaxHealth = 100;
+	[Export] public float Health;
 	[Export] float MovementMultiplier = 100;
 	[Export] float NavRadius = 0;
 	[Export] bool NavAvoidance = true;
@@ -13,7 +14,7 @@ public class Creep : KinematicBody2D
 	public delegate void navigation_finished();
 
 	[Signal]
-	public delegate void died(Creep creep);
+	public delegate void died(creep creep);
 
 	Vector2 Velocity = Vector2.Zero;
 	NavigationAgent2D nav;
@@ -30,6 +31,7 @@ public class Creep : KinematicBody2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		Health = MaxHealth;
 		HealthBar = GetNode<Label>("Health");
 		nav = GetNode<NavigationAgent2D>("NavigationAgent2D");
 	// TODO: nav.Connect("path_changed", this, "PathChanged"); 
