@@ -15,7 +15,7 @@ public class Turret : Node2D
 	creep? Target;
 	DateTime LastFire = DateTime.Now;
 
-
+	PackedScene ProjectileBase = ResourceLoader.Load<PackedScene>("res://scenes/entities/projectile.tscn");
 
 	public override void _Ready()
 	{
@@ -32,7 +32,11 @@ public class Turret : Node2D
 		if (Target != null && LastFire.AddMilliseconds(Cooldown) < DateTime.Now)
 		{
 			LastFire = DateTime.Now;
-			Target.TakeDamage(Damage + (int)GD.RandRange(0, 10));
+			var proj = ProjectileBase.Instance<projectile>();
+			proj.Speed = 600;
+			proj.Damage = Damage + (int)GD.RandRange(0, 10);
+			AddChild(proj);
+			proj.SetTarget(Target);
 		}
 
 		Update();
