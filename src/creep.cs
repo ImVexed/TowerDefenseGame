@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class creep : KinematicBody2D
+public partial class creep : CharacterBody2D
 {
 	[Export] public float MaxHealth = 100;
 	[Export] public float Health;
@@ -11,20 +11,19 @@ public class creep : KinematicBody2D
 	[Export] bool NavOptimize = false;
 
 	[Signal]
-	public delegate void navigation_finished();
+	public delegate void navigation_finishedEventHandler();
 
 	[Signal]
-	public delegate void died(creep creep);
+	public delegate void diedEventHandler(creep creep);
 
-	Vector2 Velocity = Vector2.Zero;
-	NavigationAgent2D nav;
+	NavigationAgent2D? nav;
 
 	Vector2? NavDestination;
 	Vector2? NextNavPosition;
 
 	Vector2[]? NavPath;
 
-	Label HealthBar;
+	Label? HealthBar;
 
 	PackedScene DamageText = ResourceLoader.Load<PackedScene>("res://scenes/gui/damage_number.tscn");
 
@@ -34,10 +33,10 @@ public class creep : KinematicBody2D
 		Health = MaxHealth;
 		HealthBar = GetNode<Label>("Health");
 		nav = GetNode<NavigationAgent2D>("NavigationAgent2D");
-	// TODO: nav.Connect("path_changed", this, "PathChanged"); 
-	// TODO: nav.Connect("target_reached", this, "TargetReached");
-		nav.Connect("navigation_finished", this, "NavigationFinished");
-		nav.Connect("velocity_computed", this, "VelocityComputed");
+	// TODO: nav.Connect("path_changed",new Callable(this,"PathChanged")); 
+	// TODO: nav.Connect("target_reached",new Callable(this,"TargetReached"));
+		nav.Connect("navigation_finished",new Callable(this,"NavigationFinished"));
+		nav.Connect("velocity_computed",new Callable(this,"VelocityComputed"));
 		nav.MaxSpeed = MovementMultiplier;
 		nav.Radius = NavRadius;
 		nav.AvoidanceEnabled = NavAvoidance;
@@ -48,24 +47,24 @@ public class creep : KinematicBody2D
 	{
 		Velocity = newVelocity;
 
-		if (!nav.IsTargetReached())
-			Velocity = MoveAndSlide(Velocity);
+		if (!nav!.IsTargetReached())
+			MoveAndSlide();
 		else
-			GlobalPosition = Navigation2DServer.MapGetClosestPoint(nav.GetNavigationMap(), GlobalPosition);
+			GlobalPosition = NavigationServer2D.MapGetClosestPoint(nav!.GetNavigationMap(), GlobalPosition);
 	}
-	public override void _PhysicsProcess(float delta)
+	public override void _PhysicsProcess(double delta)
 	{
-		var nextPos = nav.GetNextLocation();
+		var nextPos = nav!.GetNextLocation();
 		NextNavPosition = nextPos;
 		var targetVelocity = GlobalPosition.DirectionTo(nextPos) * MovementMultiplier;
-		nav.SetVelocity(targetVelocity);
+		nav?.SetVelocity(targetVelocity);
 	}
 	public void SetNavigationPosition(Vector2 pos)
 	{
 		NavDestination = pos;
-		nav.SetTargetLocation(pos);
+		nav?.SetTargetLocation(pos);
 
-		NavPath = Navigation2DServer.MapGetPath(nav.GetNavigationMap(), GlobalPosition, pos, NavOptimize);
+		NavPath = NavigationServer2D.MapGetPath(nav!.GetNavigationMap(), GlobalPosition, pos, NavOptimize);
 	}
 
 	public void NavigationFinished()
@@ -83,16 +82,16 @@ public class creep : KinematicBody2D
 			return;
 		}
 
-		var dmg = DamageText.Instance<damage_number>();
+		var dmg = DamageText.Instantiate<damage_number>();
 		dmg.Amount = damage;
 		dmg.Type = damage_number.DamageType.Void;
 
 		AddChild(dmg);
-		Update();
+		QueueRedraw();
 	}
 
 	public override void _Draw()
 	{
-		HealthBar.Text = $"{Health}/100";
+		HealthBar!.Text = $"{Health}/100";
 	}
 }
