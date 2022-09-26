@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+
 public class ruined_shrine : Node2D
 {
 	[Export] float SpawnRate = 1000;
@@ -18,8 +19,13 @@ public class ruined_shrine : Node2D
 	TextureButton BasicTowerButton;
 	Label FPSLabel;
 
+	Label GoldLabel;
+	System.Numerics.BigInteger Gold = 5;
+
 	bool ActivelyPlacingTower = false;
 	Turret? PlacementTower;
+
+	RandomNumberGenerator RNG = new();
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -28,6 +34,7 @@ public class ruined_shrine : Node2D
 		EndPos = GetNode<Node2D>("End Point").GlobalPosition;
 		HealthBar = GetNode<TextureProgress>("../UI/HPBar");
 		FPSLabel = GetNode<Label>("../UI/FPS");
+		GoldLabel = GetNode<Label>("../UI/Gold");
 		BasicTowerButton = GetNode<TextureButton>("../UI/BasicTower");
 		BasicTowerButton.Connect("pressed", this, "TowerButtonPressed");
 	}
@@ -63,8 +70,10 @@ public class ruined_shrine : Node2D
 		FPSLabel.Text = $"{Engine.GetFramesPerSecond()} FPS";
 		if (!GameOver && LastSpawn.AddMilliseconds(GD.RandRange(SpawnRate, SpawnRate + (SpawnRate * 0.25))) < DateTime.Now)
 		{
+			var creepBase = ResourceLoader.Load<PackedScene>("res://scenes/entities/creep.tscn");
 			var newCreep = CreepBase.Instance<creep>();
 			newCreep.Connect("navigation_finished", this, "CreepLeaked");
+			newCreep.Connect("died", this, "CreepKilled");
 
 			AddChild(newCreep);
 
@@ -74,6 +83,15 @@ public class ruined_shrine : Node2D
 			// 500, 450
 			LastSpawn = DateTime.Now;
 		}
+	}
+
+	public void CreepKilled(creep creep)
+	{
+		Gold *= (int)((creep.MaxHealth / 10) * RNG.RandfRange(1.1f, 1.3f));
+		GoldLabel.Text = $"{Gold} Gold";
+		
+		GoldLabel.Update();
+		GD.Print("Gold Update");
 	}
 
 	public void CreepLeaked()

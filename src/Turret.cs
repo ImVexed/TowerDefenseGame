@@ -8,7 +8,7 @@ using System.Reflection;
 
 public class Turret : Node2D
 {
-	[Export] float Cooldown = 1000;
+	[Export] float Cooldown = 10;
 	[Export] float Damage = 10;
 	
 	List<creep> Targets = new();

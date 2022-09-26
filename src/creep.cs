@@ -3,7 +3,8 @@ using System;
 
 public class creep : KinematicBody2D
 {
-	[Export] float Health = 100;
+	[Export] public float MaxHealth = 100;
+	[Export] public float Health;
 	[Export] float MovementMultiplier = 100;
 	[Export] float NavRadius = 0;
 	[Export] bool NavAvoidance = true;
@@ -11,6 +12,9 @@ public class creep : KinematicBody2D
 
 	[Signal]
 	public delegate void navigation_finished();
+
+	[Signal]
+	public delegate void died(creep creep);
 
 	Vector2 Velocity = Vector2.Zero;
 	NavigationAgent2D nav;
@@ -27,6 +31,7 @@ public class creep : KinematicBody2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
+		Health = MaxHealth;
 		HealthBar = GetNode<Label>("Health");
 		nav = GetNode<NavigationAgent2D>("NavigationAgent2D");
 	// TODO: nav.Connect("path_changed", this, "PathChanged"); 
@@ -72,8 +77,11 @@ public class creep : KinematicBody2D
 	{
 		Health -= damage;
 
-		if (Health <= 0)
+		if (Health <= 0) {
 			QueueFree();
+			EmitSignal("died", this);
+			return;
+		}
 
 		var dmg = DamageText.Instance<damage_number>();
 		dmg.Amount = damage;
