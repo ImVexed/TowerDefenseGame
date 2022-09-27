@@ -1,10 +1,9 @@
 using Godot;
 using System;
 
-public class damage_number : Position2D
+public partial class damage_number : Marker2D
 {
-	Label label;
-	Tween tween;
+	Label? label;
 
 	[Export] public float Amount = 0;
 	[Export] public DamageType Type;
@@ -32,12 +31,12 @@ public class damage_number : Position2D
 
 	static Dictionary<DamageType, Color> DamageColors = new()
 	{
-		{ DamageType.Physical, Color.ColorN("gray")},
-		{ DamageType.Fire, Color.ColorN("red")},
-		{ DamageType.Cold, Color.ColorN("blue")},
-		{ DamageType.Lightning, Color.ColorN("yellow")},
-		{ DamageType.Poison, Color.ColorN("green")},
-		{ DamageType.Void, Color.ColorN("purple")}
+		{ DamageType.Physical, Colors.Gray},
+		{ DamageType.Fire, Colors.Red},
+		{ DamageType.Cold, Colors.Blue},
+		{ DamageType.Lightning, Colors.Yellow},
+		{ DamageType.Poison, Colors.Green},
+		{ DamageType.Void, Colors.Purple}
 	};
 
 	public override void _Ready()
@@ -45,7 +44,7 @@ public class damage_number : Position2D
 		GD.Randomize();
 
 		label = GetNode<Label>("Label");
-		tween = GetNode<Tween>("Tween");
+		var tween = new Tween();
 
 		label.Text = Amount.ToString();
 
@@ -54,13 +53,16 @@ public class damage_number : Position2D
 		// Find the highest damage magnitude we surpass
 		var mag = Magnitudes.Last(x => Amount > x.Breakpoint);
 
-		label.AddColorOverride("font_color", DamageColors[Type]);
+		label.AddThemeColorOverride("font_color", DamageColors[Type]);
 
 		// Scale up to full size in 0.2 seconds, then after 100ms scale back down to 0.1
-		tween.InterpolateProperty(this, "scale", Scale, new Vector2(mag.Scale, mag.Scale), 0.2f, Tween.TransitionType.Linear, Tween.EaseType.Out);
-		tween.InterpolateProperty(this, "scale", new Vector2(mag.Scale, mag.Scale), new Vector2(0.1f, 0.1f), 0.7f, Tween.TransitionType.Linear, Tween.EaseType.Out, 0.3f);
-		tween.Connect("tween_all_completed", this, "TweenAllCompleted");
-		tween.Start();
+		tween.SetTrans(Tween.TransitionType.Linear);
+		tween.SetEase(Tween.EaseType.Out);
+		tween.TweenProperty(this, new NodePath("scale"), new Vector2(mag.Scale, mag.Scale), 0.2f);
+		tween.TweenProperty(this, new NodePath("scale"), new Vector2(0.1f, 0.1f), 0.7f);
+		tween.TweenInterval(0.3f);
+		tween.TweenCallback(new Callable(this,"TweenAllCompleted"));
+		tween.Play();
 	}
 
 	public void TweenAllCompleted()
@@ -68,11 +70,12 @@ public class damage_number : Position2D
 		QueueFree();
 	}
 
-	public override void _Process(float delta)
+	public override void _Process(double delta)
 	{
-		Position -= velocity * delta;
+		//TODO delta is a double so we had to cast it to a float to multiply it by velocity which is a Vector2. 
+		var rDelta = (float) delta;
+		Position -= velocity * rDelta;
 	}
-
 
 }
 

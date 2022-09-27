@@ -1,30 +1,30 @@
 using Godot;
 using System;
 
-public class projectile : Area2D
+public partial class projectile : Area2D
 {
-	[Export] public float Speed = 100;
+	[Export] public float Speed = 600;
 	[Export] public float Damage = 100;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		GetNode<VisibilityNotifier2D>("VisibilityNotifier2D").Connect("viewport_exited", this, "OnViewportExit");
-		Connect("body_entered", this, "BodyEntered");
+		GetNode<VisibleOnScreenNotifier2D>("VisibleOnScreenNotifier2D").Connect("viewport_exited",new Callable(this,"OnViewportExit"));
+		Connect("body_entered",new Callable(this,"BodyEntered"));
 	}
 
-	public override void _PhysicsProcess(float delta)
+	public override void _PhysicsProcess(double delta)
 	{
 		var direction = Vector2.Right.Rotated(Rotation);
-		GlobalPosition += Speed * direction * delta;
+		GlobalPosition = GlobalPosition + direction * (Speed * (float)delta);
 	}
 
-	public void OnViewportExit(Viewport vp)
+	public void OnViewportExit(SubViewport vp)
 	{
 		QueueFree();
 	}
 
-	public void BodyEntered(Node body) 
+	public new void BodyEntered(Node body) 
 	{
 		if (body is not creep)
 			return;
@@ -38,7 +38,7 @@ public class projectile : Area2D
 	public void SetTarget(creep c)
 	{
 		var delta = c.GlobalPosition - GlobalPosition;
-		var velocity = c.GetFloorVelocity();
+		var velocity = c.Velocity;
 
 		var deltaTime = AimAhead(delta, velocity, Speed);
 

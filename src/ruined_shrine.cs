@@ -2,7 +2,7 @@ using Godot;
 using System;
 
 
-public class ruined_shrine : Node2D
+public partial class ruined_shrine : Node2D
 {
 	[Export] float SpawnRate = 100;
 
@@ -15,11 +15,11 @@ public class ruined_shrine : Node2D
 	Vector2 StartPos;
 	Vector2 EndPos;
 
-	TextureProgress HealthBar;
-	TextureButton BasicTowerButton;
-	Label FPSLabel;
+	TextureProgressBar? HealthBar;
+	TextureButton? BasicTowerButton;
+	Label? FPSLabel;
 
-	Label GoldLabel;
+	Label? GoldLabel;
 	System.Numerics.BigInteger Gold = 5;
 
 	bool ActivelyPlacingTower = false;
@@ -32,17 +32,17 @@ public class ruined_shrine : Node2D
 	{
 		StartPos = GetNode<Node2D>("Start Point").GlobalPosition;
 		EndPos = GetNode<Node2D>("End Point").GlobalPosition;
-		HealthBar = GetNode<TextureProgress>("../UI/HPBar");
+		HealthBar = GetNode<TextureProgressBar>("../UI/HPBar");
 		FPSLabel = GetNode<Label>("../UI/FPS");
 		GoldLabel = GetNode<Label>("../UI/Gold");
 		BasicTowerButton = GetNode<TextureButton>("../UI/BasicTower");
-		BasicTowerButton.Connect("pressed", this, "TowerButtonPressed");
+		BasicTowerButton.Connect("pressed",new Callable(this,"TowerButtonPressed"));
 	}
 
 	public void TowerButtonPressed()
 	{
 		ActivelyPlacingTower = true;
-		PlacementTower = TowerBase.Instance<Turret>();
+		PlacementTower = TowerBase.Instantiate<Turret>();
 		PlacementTower.Position = GetGlobalMousePosition();
 		AddChild(PlacementTower);
 	}
@@ -53,27 +53,27 @@ public class ruined_shrine : Node2D
 		{
 			if (@event is InputEventMouseButton eventMouseButton){
 				PlacementTower!.Position = eventMouseButton.Position;
-				PlacementTower.Update();
+				PlacementTower.QueueRedraw();
 				PlacementTower = null;
 				ActivelyPlacingTower = false;
 			}
 			else if (@event is InputEventMouseMotion eventMouseMotion){
 				PlacementTower!.Position = eventMouseMotion.Position;
-				PlacementTower.Update();
+				PlacementTower.QueueRedraw();
 			}
 		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(float delta)
+	public override void _Process(double delta)
 	{
-		FPSLabel.Text = $"{Engine.GetFramesPerSecond()} FPS";
+		FPSLabel!.Text = $"{Engine.GetFramesPerSecond()} FPS";
 		if (!GameOver && LastSpawn.AddMilliseconds(GD.RandRange(SpawnRate, SpawnRate + (SpawnRate * 0.25))) < DateTime.Now)
 		{
 			var creepBase = ResourceLoader.Load<PackedScene>("res://scenes/entities/creep.tscn");
-			var newCreep = CreepBase.Instance<creep>();
-			newCreep.Connect("navigation_finished", this, "CreepLeaked");
-			newCreep.Connect("died", this, "CreepKilled");
+			var newCreep = CreepBase.Instantiate<creep>();
+			newCreep.Connect("navigation_finished",new Callable(this,"CreepLeaked"));
+			newCreep.Connect("died",new Callable(this,"CreepKilled"));
 
 			AddChild(newCreep);
 
@@ -88,23 +88,23 @@ public class ruined_shrine : Node2D
 	public void CreepKilled(creep creep)
 	{
 		Gold *= (int)((creep.MaxHealth / 10) * RNG.RandfRange(1.1f, 1.3f));
-		GoldLabel.Text = $"{Gold} Gold";
+		GoldLabel!.Text = $"{Gold} Gold";
 		
-		GoldLabel.Update();
+		GoldLabel!.QueueRedraw();
 		GD.Print("Gold Update");
 	}
 
 	public void CreepLeaked()
 	{
-		HealthBar.Value -= 10;
+		HealthBar!.Value -= 10;
 
-		if (HealthBar.Value <= 0)
+		if (HealthBar?.Value <= 0)
 		{
 			if (!GameOver)
 			{
 				GameOver = true;
-				var go = GameOverScene.Instance<Label>();
-				go.SetPosition((GetViewportRect().Size / 2) - (go.RectSize / 2));
+				var go = GameOverScene.Instantiate<Label>();
+				go.SetPosition((GetViewportRect().Size / 2) - (go.Size / 2));
 				AddChild(go);
 			}
 		}
