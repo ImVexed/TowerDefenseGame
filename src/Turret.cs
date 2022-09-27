@@ -6,8 +6,9 @@ using System.Reflection;
 
 #nullable enable
 
-public class Turret : Node2D
+public partial class Turret : Node2D
 {
+
     [Flags]
     public enum TargetingType
     {
