@@ -1,7 +1,8 @@
 res://root_scene.tscn
-res://src/damage_number.cs
 res://scenes/gui/damage_number.tscn
-res://src/ruined_shrine.cs
-res://src/Inventory.cs
-res://src/creep.cs
+res://scenes/maps/ruined_shrine.tscn
+res://scenes/entities/projectile.tscn
 res://src/projectile.cs
+res://src/ruined_shrine.cs
+res://scenes/entities/creep.tscn
+res://src/creep.cs

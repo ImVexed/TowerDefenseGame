@@ -16,4 +16,6 @@ offset_left = -50.0
 offset_top = -12.5
 offset_right = 50.0
 offset_bottom = 12.5
+grow_horizontal = 2
+grow_vertical = 2
 text = "200"
