@@ -33,3 +33,15 @@ position = Vector2( 1109, 529 )
 
 [node name="Simple Turret" parent="." instance=ExtResource( 3 )]
 position = Vector2( 795, 431 )
+Cooldown = 50.0
+Damage = 5.0
+Targeting = 2
+
+[node name="Turret" parent="." instance=ExtResource( 3 )]
+position = Vector2( 641, 259 )
+Targeting = 2
+
+[node name="Turret2" parent="." instance=ExtResource( 3 )]
+position = Vector2( 848, 211 )
+Damage = 5.0
+Targeting = 5
