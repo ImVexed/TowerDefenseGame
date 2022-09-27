@@ -8,80 +8,112 @@ using System.Reflection;
 
 public class Turret : Node2D
 {
-	[Export] float Cooldown = 10;
-	[Export] float Damage = 10;
-	
-	List<creep> Targets = new();
-	creep? Target;
-	DateTime LastFire = DateTime.Now;
+    [Flags]
+    public enum TargetingType
+    {
+        First,
+        Last,
+        Closest,
+        Furthest,
+        Strongest,
+        Weakest
+    }
 
-	PackedScene ProjectileBase = ResourceLoader.Load<PackedScene>("res://scenes/entities/projectile.tscn");
+    [Export] float Cooldown = 100;
+    [Export] float Damage = 10;
 
-	public override void _Ready()
-	{
-		var area = GetNode<Area2D>("Area2D");
+    List<creep> Targets = new();
+    creep? Target;
+    DateTime LastFire = DateTime.Now;
 
-		area.Connect("body_entered", this,"BodyEntered");
-		area.Connect("body_exited", this, "BodyExited");
-	}
+    [Export(PropertyHint.Enum, nameof(TargetingType))]
+    public TargetingType Targeting = TargetingType.First;
 
-	public override void _Process(float delta)
-	{
-		UpdateTarget();
-		
-		if (Target != null && LastFire.AddMilliseconds(Cooldown) < DateTime.Now)
-		{
-			LastFire = DateTime.Now;
-			var proj = ProjectileBase.Instance<projectile>();
-			proj.Speed = 600;
-			proj.Damage = Damage + (int)GD.RandRange(0, 10);
-			AddChild(proj);
-			proj.SetTarget(Target);
-		}
+    PackedScene ProjectileBase = ResourceLoader.Load<PackedScene>("res://scenes/entities/projectile.tscn");
 
-		Update();
-	}
+    public override void _Ready()
+    {
+        var area = GetNode<Area2D>("Area2D");
 
-	public override void _Draw()
-	{
-		if (Target != null)
-			DrawLine(new Vector2(0,0), Target.Position - Position, Color.Color8(255, 0, 0));	
-	}
+        area.Connect("body_entered", this, "BodyEntered");
+        area.Connect("body_exited", this, "BodyExited");
+    }
 
-	private void BodyEntered(Node body)
-	{
-		if (body is not creep)
-			return;
-		
-		Targets.Add((creep)body);
-	}
-	
-	private void BodyExited(Node body)
-	{
-		if (body is not creep)
-			return;
-		
-		var s = (creep)body;
+    public override void _Process(float delta)
+    {
+        UpdateTarget();
 
-		if (s == Target)
-			Target = null;
+        if (Target != null && LastFire.AddMilliseconds(Cooldown) < DateTime.Now)
+        {
+            LastFire = DateTime.Now;
+            var proj = ProjectileBase.Instance<projectile>();
+            proj.Speed = 600;
+            proj.Damage = Damage + (int)GD.RandRange(0, 10);
+            AddChild(proj);
+            proj.SetTarget(Target);
+        }
+
+        Update();
+    }
+
+    private creep GetBestTargetFromTargetingType()
+    {
+        switch (Targeting)
+        {
+            case TargetingType.First:
+                return Targets.First();
+            case TargetingType.Last:
+                return Targets.Last();
+            case TargetingType.Closest:
+                return Targets.OrderBy(x => Position.DistanceTo(x.Position)).First();
+            case TargetingType.Furthest:
+                return Targets.OrderBy(x => Position.DistanceTo(x.Position)).Last();
+            case TargetingType.Strongest:
+                return Targets.OrderBy(x => x.Health).Last();
+            case TargetingType.Weakest:
+                return Targets.OrderBy(x => x.Health).First();
+            default:
+                throw new ArgumentOutOfRangeException($"Invalid Targeting Type: {Targeting}");
+        }
+    }
+
+    public override void _Draw()
+    {
+        if (Target != null)
+            DrawLine(new Vector2(0, 0), Target.Position - Position, Color.Color8(255, 0, 0));
+    }
+
+    private void BodyEntered(Node body)
+    {
+        if (body is not creep)
+            return;
+
+        var s = (creep)body;
+
+        Targets.Add(s);
+        UpdateTarget();
+    }
+
+    private void BodyExited(Node body)
+    {
+        if (body is not creep)
+            return;
+
+        var s = (creep)body;
+
+        if (s == Target)
+            Target = null;
 
 
-		Targets.Remove(s);
-	}
+        Targets.Remove(s);
+        UpdateTarget();
+    }
 
-	private void UpdateTarget()
-	{
-		if (Targets.Count == 0)
-			return;
+    private void UpdateTarget()
+    {
+        if (Targets.Count == 0)
+            return;
 
-
-		var closestTarget = Targets.First();
-
-		foreach (var target in Targets)
-			if (Position.DistanceTo(target.Position) < Position.DistanceTo(closestTarget.Position))
-				closestTarget = target;
-
-		Target = closestTarget;
-	}
+        Target = GetBestTargetFromTargetingType();
+    }
 }
