@@ -11,12 +11,12 @@ public class Turret : Node2D
     [Flags]
     public enum TargetingType
     {
-        First = 0,
-        Last = 1,
-        Closest = 2,
-        Furthest = 3,
-        Strongest = 4,
-        Weakest = 5
+        First,
+        Last,
+        Closest,
+        Furthest,
+        Strongest,
+        Weakest
     }
 
     [Export] float Cooldown = 100;
@@ -26,8 +26,8 @@ public class Turret : Node2D
     creep? Target;
     DateTime LastFire = DateTime.Now;
 
-    [Export(PropertyHint.Enum, "First,Last,Closest,Furthest,Strongest,Weakest")]
-    public int Targeting = (int)TargetingType.First;
+    [Export(PropertyHint.Enum, nameof(TargetingType))]
+    public TargetingType Targeting = TargetingType.First;
 
     PackedScene ProjectileBase = ResourceLoader.Load<PackedScene>("res://scenes/entities/projectile.tscn");
 
@@ -60,17 +60,17 @@ public class Turret : Node2D
     {
         switch (Targeting)
         {
-            case (int)TargetingType.First:
+            case TargetingType.First:
                 return Targets.First();
-            case (int)TargetingType.Last:
+            case TargetingType.Last:
                 return Targets.Last();
-            case (int)TargetingType.Closest:
+            case TargetingType.Closest:
                 return Targets.OrderBy(x => Position.DistanceTo(x.Position)).First();
-            case (int)TargetingType.Furthest:
+            case TargetingType.Furthest:
                 return Targets.OrderBy(x => Position.DistanceTo(x.Position)).Last();
-            case (int)TargetingType.Strongest:
+            case TargetingType.Strongest:
                 return Targets.OrderBy(x => x.Health).Last();
-            case (int)TargetingType.Weakest:
+            case TargetingType.Weakest:
                 return Targets.OrderBy(x => x.Health).First();
             default:
                 throw new ArgumentOutOfRangeException($"Invalid Targeting Type: {Targeting}");
