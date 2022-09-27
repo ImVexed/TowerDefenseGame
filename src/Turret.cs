@@ -36,25 +36,25 @@ public partial class Turret : Node2D
     {
         var area = GetNode<Area2D>("Area2D");
 
-        area.Connect("body_entered", this, "BodyEntered");
-        area.Connect("body_exited", this, "BodyExited");
+        area.Connect("body_entered", new Callable(this, "BodyEntered"));
+        area.Connect("body_exited", new Callable(this, "BodyExited"));
     }
 
-    public override void _Process(float delta)
+    public override void _Process(double delta)
     {
         UpdateTarget();
 
         if (Target != null && LastFire.AddMilliseconds(Cooldown) < DateTime.Now)
         {
             LastFire = DateTime.Now;
-            var proj = ProjectileBase.Instance<projectile>();
+            var proj = ProjectileBase.Instantiate<projectile>();
             proj.Speed = 600;
             proj.Damage = Damage + (int)GD.RandRange(0, 10);
             AddChild(proj);
             proj.SetTarget(Target);
         }
 
-        Update();
+        QueueRedraw();
     }
 
     private creep GetBestTargetFromTargetingType()

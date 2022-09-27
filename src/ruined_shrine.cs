@@ -91,7 +91,6 @@ public partial class ruined_shrine : Node2D
 		GoldLabel!.Text = $"{Gold} Gold";
 		
 		GoldLabel!.QueueRedraw();
-		GD.Print("Gold Update");
 	}
 
 	public void CreepLeaked()

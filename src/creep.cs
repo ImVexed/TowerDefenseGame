@@ -3,12 +3,12 @@ using System;
 
 public partial class creep : CharacterBody2D
 {
-	[Export] public float MaxHealth = 100;
+	[Export] public float MaxHealth = 1000;
 	[Export] public float Health;
 	[Export] float MovementMultiplier = 100;
 	[Export] float NavRadius = 0;
 	[Export] bool NavAvoidance = true;
-	[Export] bool NavOptimize = false;
+	[Export] bool NavOptimize = true;
 
 	[Signal]
 	public delegate void navigation_finishedEventHandler();
