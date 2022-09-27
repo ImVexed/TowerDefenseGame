@@ -85,13 +85,13 @@ public class Turret : Node2D
 
     private void BodyEntered(Node body)
     {
-		if (body is not creep)
-			return;
+        if (body is not creep)
+            return;
 
-		var s = (creep)body;
+        var s = (creep)body;
 
-		Targets.Add(s);
-		UpdateTarget();
+        Targets.Add(s);
+        UpdateTarget();
     }
 
     private void BodyExited(Node body)
@@ -106,7 +106,7 @@ public class Turret : Node2D
 
 
         Targets.Remove(s);
-		UpdateTarget();
+        UpdateTarget();
     }
 
     private void UpdateTarget()
