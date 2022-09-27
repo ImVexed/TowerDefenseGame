@@ -44,7 +44,7 @@ public partial class damage_number : Marker2D
 		GD.Randomize();
 
 		label = GetNode<Label>("Label");
-		var tween = new Tween();
+		var tween = CreateTween();
 
 		label.Text = Amount.ToString();
 

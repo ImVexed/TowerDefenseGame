@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://biiol8y3hyfip"]
 
-[ext_resource type="PackedScene" path="res://scenes/maps/ruined_shrine.tscn" id="1"]
+[ext_resource type="PackedScene" uid="uid://bbypj10ux7652" path="res://scenes/maps/ruined_shrine.tscn" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/gui/map_ui.tscn" id="2"]
 
 [node name="Root" type="Node2D"]
