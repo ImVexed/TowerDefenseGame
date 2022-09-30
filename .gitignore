@@ -19,5 +19,6 @@ export_presets.cfg
 data_*/
 
 .godot
+.vscode
 
 # End of https://www.toptal.com/developers/gitignore/api/godot
