@@ -92,6 +92,6 @@ public partial class creep : CharacterBody2D
 
 	public override void _Draw()
 	{
-		HealthBar!.Text = $"{Health}/100";
+		HealthBar!.Text = $"{Health}/{MaxHealth}";
 	}
 }
