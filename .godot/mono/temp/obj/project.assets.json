@@ -85,29 +85,31 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\camer\\.nuget\\packages\\": {},
-    "C:\\Users\\camer\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder": {}
+    "C:\\Users\\1xCo\\.nuget\\packages\\": {},
+    "C:\\Users\\1xCo\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Code\\TowerDefenseGame\\TowerDefenseGame.csproj",
+      "projectUniqueName": "C:\\Users\\1xCo\\Documents\\2D Navigation Demo\\TowerDefenseGame.csproj",
       "projectName": "TowerDefenseGame",
-      "projectPath": "C:\\Code\\TowerDefenseGame\\TowerDefenseGame.csproj",
-      "packagesPath": "C:\\Users\\camer\\.nuget\\packages\\",
-      "outputPath": "C:\\Code\\TowerDefenseGame\\.godot\\mono\\temp\\obj\\",
+      "projectPath": "C:\\Users\\1xCo\\Documents\\2D Navigation Demo\\TowerDefenseGame.csproj",
+      "packagesPath": "C:\\Users\\1xCo\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\1xCo\\Documents\\2D Navigation Demo\\.godot\\mono\\temp\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Users\\camer\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder"
+        "C:\\Users\\1xCo\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\camer\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Users\\camer\\AppData\\Roaming\\NuGet\\config\\Godot.Offline.Config"
+        "C:\\Users\\1xCo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\1xCo\\AppData\\Roaming\\NuGet\\config\\Godot.Offline.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -155,7 +157,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }
