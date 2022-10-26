@@ -20,7 +20,7 @@ public partial class ruined_shrine : Node2D
 	Label? FPSLabel;
 
 	Label? GoldLabel;
-	System.Numerics.BigInteger Gold = 5;
+	BigRational Gold = 5;
 
 	bool ActivelyPlacingTower = false;
 	Turret? PlacementTower;
@@ -87,7 +87,7 @@ public partial class ruined_shrine : Node2D
 
 	public void CreepKilled(creep creep)
 	{
-		Gold *= (int)((creep.MaxHealth / 10) * RNG.RandfRange(1.1f, 1.3f));
+		Gold += (int)((creep.MaxHealth / 10) * RNG.RandfRange(1.1f, 1.3f));
 		GoldLabel!.Text = $"{Gold} Gold";
 		
 		GoldLabel!.QueueRedraw();

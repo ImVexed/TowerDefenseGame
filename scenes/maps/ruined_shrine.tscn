@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://src/ruined_shrine.cs" id="2"]
 [ext_resource type="PackedScene" path="res://scenes/entities/turret.tscn" id="3"]
-[ext_resource type="Texture2D" uid="uid://b2f1rw6t52uyn" path="res://assets/towerDefense_vector.svg" id="4_0omem"]
+[ext_resource type="Texture2D" uid="uid://ctyuvxxnwaqu8" path="res://assets/towerDefense_vector.svg" id="4_0omem"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_45w8u"]
 vertices = PackedVector2Array(-32, -32, 32, -32, 32, 32, -32, 32)

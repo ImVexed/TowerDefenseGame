@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bi8diayyjowl0"]
 
-[ext_resource type="Texture2D" uid="uid://d4fxdxn5it44a" path="res://assets/turrets/Bullet_MG.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://qa7c4ml8ail0" path="res://assets/turrets/Bullet_MG.png" id="1"]
 [ext_resource type="Script" path="res://src/projectile.cs" id="2"]
 
 [sub_resource type="RectangleShape2D" id="1"]
