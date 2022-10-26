@@ -27,7 +27,7 @@ public partial class Turret : Node2D
 
     List<creep> Targets = new();
     creep? Target;
-    DateTime LastFire = DateTime.Now;
+    DateTime LastFireTime = DateTime.Now;
 
     [Export(PropertyHint.Enum, nameof(TargetingType))]
     public TargetingType Targeting = TargetingType.First;
@@ -49,9 +49,9 @@ public partial class Turret : Node2D
 
         UpdateTarget();
 
-        if (Target != null && LastFire.AddMilliseconds(Cooldown) < DateTime.Now)
+        if (Target != null && LastFireTime.AddMilliseconds(Cooldown) < DateTime.Now)
         {
-            LastFire = DateTime.Now;
+            LastFireTime = DateTime.Now;
             var proj = ProjectileBase.Instantiate<projectile>();
             proj.Speed = 600;
             proj.Damage = Damage + (int)GD.RandRange(0, 10);
