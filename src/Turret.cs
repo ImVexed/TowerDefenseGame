@@ -23,6 +23,8 @@ public partial class Turret : Node2D
     [Export] float Cooldown = 100;
     [Export] float Damage = 10;
 
+    [Export] public bool Active = true;
+
     List<creep> Targets = new();
     creep? Target;
     DateTime LastFire = DateTime.Now;
@@ -42,6 +44,9 @@ public partial class Turret : Node2D
 
     public override void _Process(double delta)
     {
+        if (!Active)
+            return;
+
         UpdateTarget();
 
         if (Target != null && LastFire.AddMilliseconds(Cooldown) < DateTime.Now)
