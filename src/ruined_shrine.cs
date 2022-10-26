@@ -44,6 +44,7 @@ public partial class ruined_shrine : Node2D
 		ActivelyPlacingTower = true;
 		PlacementTower = TowerBase.Instantiate<Turret>();
 		PlacementTower.Position = GetGlobalMousePosition();
+		PlacementTower.Active = false;
 		AddChild(PlacementTower);
 	}
 
@@ -54,6 +55,7 @@ public partial class ruined_shrine : Node2D
 			if (@event is InputEventMouseButton eventMouseButton){
 				PlacementTower!.Position = eventMouseButton.Position;
 				PlacementTower.QueueRedraw();
+				PlacementTower.Active = true;
 				PlacementTower = null;
 				ActivelyPlacingTower = false;
 			}
