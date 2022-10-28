@@ -26,7 +26,8 @@ public partial class damage_number : Marker2D
 		Cold,
 		Lightning,
 		Poison,
-		Void
+		Void,
+		Holy
 	}
 
 	static Dictionary<DamageType, Color> DamageColors = new()
@@ -36,7 +37,8 @@ public partial class damage_number : Marker2D
 		{ DamageType.Cold, Colors.Blue},
 		{ DamageType.Lightning, Colors.Yellow},
 		{ DamageType.Poison, Colors.Green},
-		{ DamageType.Void, Colors.Purple}
+		{ DamageType.Void, Colors.Purple},
+		{ DamageType.Holy, Colors.Gold}
 	};
 
 	public override void _Ready()
