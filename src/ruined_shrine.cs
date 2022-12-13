@@ -4,7 +4,7 @@ using System;
 
 public partial class ruined_shrine : Node2D
 {
-	[Export] float SpawnRate = 100;
+	[Export] float SpawnRate = 2000;
 
 	DateTime LastSpawn = DateTime.Now;
 

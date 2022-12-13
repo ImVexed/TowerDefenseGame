@@ -3,8 +3,9 @@ using System;
 
 public partial class creep : CharacterBody2D
 {
-	[Export] public float MaxHealth = 1000;
-	[Export] public float Health;
+	public Resistances Resistances = new Resistances();
+	public BigRational MaxHealth = 1000;
+	public BigRational Health;
 	[Export] float MovementMultiplier = 100;
 	[Export] float NavRadius = 0;
 	[Export] bool NavAvoidance = true;
@@ -62,7 +63,7 @@ public partial class creep : CharacterBody2D
 	public void SetNavigationPosition(Vector2 pos)
 	{
 		NavDestination = pos;
-		nav?.SetTargetLocation(pos);
+		nav!.TargetLocation = pos;
 
 		NavPath = NavigationServer2D.MapGetPath(nav!.GetNavigationMap(), GlobalPosition, pos, NavOptimize);
 	}
@@ -72,8 +73,10 @@ public partial class creep : CharacterBody2D
 		EmitSignal("navigation_finished");
 	}
 
-	public void TakeDamage(float damage)
+	public void TakeDamage(Damage damage)
 	{
+		var resistedDamage = damage / Resistances;
+
 		Health -= damage;
 
 		if (Health <= 0) {
@@ -84,7 +87,7 @@ public partial class creep : CharacterBody2D
 
 		var dmg = DamageText.Instantiate<damage_number>();
 		dmg.Amount = damage;
-		dmg.Type = damage_number.DamageType.Void;
+		dmg.Type = damage.PrimaryDamageType();
 
 		AddChild(dmg);
 		QueueRedraw();

@@ -4,13 +4,15 @@ using System;
 public partial class projectile : Area2D
 {
 	[Export] public float Speed = 600;
-	[Export] public float Damage = 100;
+	[Export] public bool FreeAfterHit = true;
+
+	public OnHitCallback? OnHitCallback;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		GetNode<VisibleOnScreenNotifier2D>("VisibleOnScreenNotifier2D").Connect("screen_exited",new Callable(this,"OnViewportExit"));
-		Connect("body_entered",new Callable(this,"BodyEntered"));
+		GetNode<VisibleOnScreenNotifier2D>("VisibleOnScreenNotifier2D").Connect("screen_exited", new Callable(this, "OnViewportExit"));
+		Connect("body_entered", new Callable(this, "BodyEntered"));
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -24,15 +26,19 @@ public partial class projectile : Area2D
 		QueueFree();
 	}
 
-	public new void BodyEntered(Node body) 
+	public new void BodyEntered(Node body)
 	{
 		if (body is not creep)
 			return;
 
 		var c = body as creep;
 
-		c!.TakeDamage(Damage);
-		QueueFree();
+		OnHitCallback?.Invoke(c!);
+
+		if (FreeAfterHit)
+		{
+			QueueFree();
+		}
 	}
 
 	public void SetTarget(creep c)
@@ -42,10 +48,13 @@ public partial class projectile : Area2D
 
 		var deltaTime = AimAhead(delta, velocity, Speed);
 
-		if (deltaTime > 0) {
-			var aimPoint = c.GlobalPosition + velocity *deltaTime;
+		if (deltaTime > 0)
+		{
+			var aimPoint = c.GlobalPosition + velocity * deltaTime;
 			LookAt(aimPoint);
-		} else {
+		}
+		else
+		{
 			// nothing?
 		}
 	}

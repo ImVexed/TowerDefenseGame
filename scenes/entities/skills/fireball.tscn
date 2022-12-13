@@ -1,0 +1,65 @@
+[gd_scene load_steps=11 format=3 uid="uid://dcm0ra4nhuba8"]
+
+[ext_resource type="Texture2D" uid="uid://bgmu4ynksceey" path="res://assets/skills/fireball.png" id="1_6uddf"]
+[ext_resource type="Script" path="res://src/projectile.cs" id="1_shhlb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kal55"]
+atlas = ExtResource("1_6uddf")
+region = Rect2(0, 0, 512, 197)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_813jd"]
+atlas = ExtResource("1_6uddf")
+region = Rect2(0, 197, 512, 197)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wnvx3"]
+atlas = ExtResource("1_6uddf")
+region = Rect2(512, 197, 512, 197)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q04ep"]
+atlas = ExtResource("1_6uddf")
+region = Rect2(512, 0, 512, 197)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tm6l6"]
+atlas = ExtResource("1_6uddf")
+region = Rect2(1024, 0, 512, 197)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iotrx"]
+atlas = ExtResource("1_6uddf")
+region = Rect2(1024, 197, 512, 197)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x6kpe"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"",
+"speed": 5.0
+}, {
+"frames": [SubResource("AtlasTexture_kal55"), SubResource("AtlasTexture_813jd"), SubResource("AtlasTexture_wnvx3"), SubResource("AtlasTexture_q04ep"), SubResource("AtlasTexture_tm6l6"), SubResource("AtlasTexture_iotrx")],
+"loop": true,
+"name": &"fireball",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7xiaa"]
+radius = 13.0237
+height = 77.995
+
+[node name="fireball" type="Area2D"]
+script = ExtResource("1_shhlb")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(-31, 7)
+rotation = -3.14731
+scale = Vector2(0.16212, 0.157593)
+frames = SubResource("SpriteFrames_x6kpe")
+animation = &"fireball"
+playing = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-27, 2)
+rotation = -1.57317
+shape = SubResource("CapsuleShape2D_7xiaa")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(-25.375, 2)
+scale = Vector2(3.5625, 0.999998)

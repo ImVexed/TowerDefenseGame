@@ -1,9 +1,4 @@
 using Godot;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
 #nullable enable
 
 public partial class Turret : Node2D
@@ -26,13 +21,19 @@ public partial class Turret : Node2D
     [Export] public bool Active = true;
 
     List<creep> Targets = new();
+
     creep? Target;
+    Castable? Spell;
+
     DateTime LastFireTime = DateTime.Now;
 
     [Export(PropertyHint.Enum, nameof(TargetingType))]
     public TargetingType Targeting = TargetingType.First;
 
-    PackedScene ProjectileBase = ResourceLoader.Load<PackedScene>("res://scenes/entities/projectile.tscn");
+    public Turret()
+    {
+        Spell = (new Fireball(this)) as Castable;
+    }
 
     public override void _Ready()
     {
@@ -49,14 +50,15 @@ public partial class Turret : Node2D
 
         UpdateTarget();
 
-        if (Target != null && LastFireTime.AddMilliseconds(Cooldown) < DateTime.Now)
+        if (
+            Target != null &&
+            Spell != null &&
+            LastFireTime.AddMilliseconds(Spell.Cooldown) < DateTime.Now
+        )
         {
             LastFireTime = DateTime.Now;
-            var proj = ProjectileBase.Instantiate<projectile>();
-            proj.Speed = 600;
-            proj.Damage = Damage + (int)GD.RandRange(0, 10);
-            AddChild(proj);
-            proj.SetTarget(Target);
+
+            Spell.Cast(Target);
         }
 
         QueueRedraw();
