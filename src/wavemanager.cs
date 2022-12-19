@@ -103,7 +103,7 @@ public class WaveManager
         // Exponential decay function, with a minimum of 200ms between spawns
         // At wave 100 Easy is ~400ms, Medium is ~300ms, Hard is ~200ms
         var spawnDelay = 900 * Math.Pow(1 - (0.01 / DifficultyScalar), WaveNumber) + 100;
-        GD.Print(spawnDelay);
+
         if (LastSpawnTime.AddMilliseconds(spawnDelay) < DateTime.Now)
         {
             LastSpawnTime = DateTime.Now;
