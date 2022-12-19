@@ -94,11 +94,12 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_efjqd"]
 
 [node name="explosion" type="Area2D"]
+collision_layer = 4
 script = ExtResource("1_ecgbi")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 visibility_layer = 524288
-z_index = 3
+z_index = 4
 position = Vector2(-4.76837e-07, -3.57628e-07)
 scale = Vector2(0.104167, 0.104167)
 frames = SubResource("SpriteFrames_506sk")

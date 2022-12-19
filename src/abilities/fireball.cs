@@ -2,8 +2,6 @@ using Godot;
 
 public partial class Fireball : Castable
 {
-	static PackedScene fireballscene = ResourceLoader.Load<PackedScene>("res://scenes/entities/skills/fireball.tscn");
-	static PackedScene explosionscene = ResourceLoader.Load<PackedScene>("res://scenes/entities/skills/explosion.tscn");
 	Damage PrimaryHit = new Damage(Fire: 100);
 	Damage SecondaryExplosion = new Damage(Fire: 50);
 	public double Cooldown
@@ -18,34 +16,36 @@ public partial class Fireball : Castable
 		this.turret = turret;
 	}
 
-	public void SpawnProjectile(Turret turret, creep target)
+	public projectile SpawnProjectile(Vector2 position)
 	{
-		var proj = fireballscene.Instantiate<projectile>();
-		turret.AddChild(proj);
+		var proj = ResourceManager.NewFireball();
+		proj.RemainingForks = 3;
+		//proj.RemainingChains = 1;
+		proj.SpawnProjectileCallback = SpawnProjectile;
+		proj.GlobalPosition = position;
+		turret.CallDeferred("AddChildAtPosition", proj, position);
 
 		proj.Speed = 600;
-		proj.OnHitCallback = OnProjectileHit;
-		proj.SetTarget(target);
-	}
+		proj.OnHitCallback = (c) =>
+		{
+			c.TakeDamage(PrimaryHit);
 
-	public void OnProjectileHit(creep c)
-	{
-		c.TakeDamage(PrimaryHit);
+			var e = ResourceManager.NewExplosion();
+			e.Scale *= 3;
+			e.OnHitCallback = (c) =>
+			{
+				c.TakeDamage(SecondaryExplosion);
+			};
 
-		var e = explosionscene.Instantiate<explosion>();
-		e.Scale *= 3;
-		e.OnHitCallback = OnAOEHit;
-		turret.AddChild(e);
-		e.GlobalPosition = c.GlobalPosition;
-	}
+			turret.CallDeferred("AddChildAtPosition", e, c.GlobalPosition);
+		};
 
-	public void OnAOEHit(creep c)
-	{
-		c.TakeDamage(SecondaryExplosion);
+		return proj;
 	}
 
 	public void Cast(creep target)
 	{
-		SpawnProjectile(turret, target);
+		var p = SpawnProjectile(turret.GlobalPosition);
+		p.SetTarget(target.GlobalPosition, target.Velocity);
 	}
 }

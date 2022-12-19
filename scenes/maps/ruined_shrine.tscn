@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://bbypj10ux7652"]
 
 [ext_resource type="Script" path="res://src/ruined_shrine.cs" id="2"]
-[ext_resource type="PackedScene" path="res://scenes/entities/turret.tscn" id="3"]
+[ext_resource type="PackedScene" uid="uid://b4xoi64awetcp" path="res://scenes/entities/turret.tscn" id="3"]
 [ext_resource type="Texture2D" uid="uid://ctyuvxxnwaqu8" path="res://assets/towerDefense_vector.svg" id="4_0omem"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_45w8u"]

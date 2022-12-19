@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dcm0ra4nhuba8"]
+[gd_scene load_steps=12 format=3 uid="uid://dcm0ra4nhuba8"]
 
 [ext_resource type="Texture2D" uid="uid://bgmu4ynksceey" path="res://assets/skills/fireball.png" id="1_6uddf"]
 [ext_resource type="Script" path="res://src/projectile.cs" id="1_shhlb"]
@@ -44,7 +44,11 @@ animations = [{
 radius = 13.0237
 height = 77.995
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_hcd2q"]
+radius = 500.0
+
 [node name="fireball" type="Area2D"]
+collision_layer = 4
 script = ExtResource("1_shhlb")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -63,3 +67,9 @@ shape = SubResource("CapsuleShape2D_7xiaa")
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
 position = Vector2(-25.375, 2)
 scale = Vector2(3.5625, 0.999998)
+
+[node name="ChainArea2D" type="Area2D" parent="."]
+collision_layer = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ChainArea2D"]
+shape = SubResource("CircleShape2D_hcd2q")

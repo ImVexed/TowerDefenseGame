@@ -21,7 +21,7 @@ public partial class explosion : Area2D
 	{
 		if (hasPhysicsProcessed && hasAnimationEnded)
 		{	
-			QueueFree();
+			CallDeferred("queue_free");
 			OnFreeCallback?.DynamicInvoke();
 		}
 	}
