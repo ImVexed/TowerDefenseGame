@@ -4,28 +4,23 @@ using System;
 
 public partial class ruined_shrine : Node2D
 {
-	[Export] float SpawnRate = 2000;
-
-	DateTime LastSpawn = DateTime.Now;
-
-	PackedScene GameOverScene = ResourceLoader.Load<PackedScene>("res://scenes/gui/game_over.tscn");
-	PackedScene CreepBase = ResourceLoader.Load<PackedScene>("res://scenes/entities/creep.tscn");
-	PackedScene TowerBase = ResourceLoader.Load<PackedScene>("res://scenes/entities/turret.tscn");
 	bool GameOver;
 	Vector2 StartPos;
 	Vector2 EndPos;
 
 	TextureProgressBar? HealthBar;
 	TextureButton? BasicTowerButton;
+	TextureButton? PauseButton;
 	Label? FPSLabel;
-
+	Label? WaveLabel;
 	Label? GoldLabel;
-	BigRational Gold = 5;
+	Label? CountdownLabel;
 
 	bool ActivelyPlacingTower = false;
 	Turret? PlacementTower;
 
-	RandomNumberGenerator RNG = new();
+	WaveManager? WaveManager;
+
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -34,32 +29,60 @@ public partial class ruined_shrine : Node2D
 		EndPos = GetNode<Node2D>("End Point").GlobalPosition;
 		HealthBar = GetNode<TextureProgressBar>("../UI/HPBar");
 		FPSLabel = GetNode<Label>("../UI/FPS");
+		WaveLabel = GetNode<Label>("../UI/Wave");
 		GoldLabel = GetNode<Label>("../UI/Gold");
+		CountdownLabel = GetNode<Label>("../UI/Countdown");
 		BasicTowerButton = GetNode<TextureButton>("../UI/BasicTower");
-		BasicTowerButton.Connect("pressed",new Callable(this,"TowerButtonPressed"));
+		BasicTowerButton.Connect("pressed", new Callable(this, "TowerButtonPressed"));
+		PauseButton = GetNode<TextureButton>("../UI/Pause");
+		PauseButton.Connect("pressed", new Callable(this, "PauseButtonPressed"));
+		WaveManager = new WaveManager(Diffuculty.Medium, this, StartPos, EndPos);
 	}
 
 	public void TowerButtonPressed()
 	{
+		if (WaveManager!.Gold < 100)
+			return;
+
+		WaveManager.Gold -= 100;
+
 		ActivelyPlacingTower = true;
-		PlacementTower = TowerBase.Instantiate<Turret>();
+		PlacementTower = ResourceManager.NewTower();
 		PlacementTower.Position = GetGlobalMousePosition();
 		PlacementTower.Active = false;
+
 		AddChild(PlacementTower);
+	}
+
+	public void PauseButtonPressed()
+	{
+		if (WaveManager!.State == WaveState.NotStarted)
+		{
+			WaveManager.Start();
+			PauseButton!.TextureNormal = ResourceManager.PauseTexture;
+
+		}
+		else if (WaveManager.State == WaveState.Started)
+		{
+			WaveManager.Pause();
+			PauseButton!.TextureNormal = ResourceManager.PlayTexture;
+		}
 	}
 
 	public override void _Input(InputEvent @event)
 	{
 		if (ActivelyPlacingTower)
 		{
-			if (@event is InputEventMouseButton eventMouseButton){
+			if (@event is InputEventMouseButton eventMouseButton)
+			{
 				PlacementTower!.Position = eventMouseButton.Position;
 				PlacementTower.QueueRedraw();
 				PlacementTower.Active = true;
 				PlacementTower = null;
 				ActivelyPlacingTower = false;
 			}
-			else if (@event is InputEventMouseMotion eventMouseMotion){
+			else if (@event is InputEventMouseMotion eventMouseMotion)
+			{
 				PlacementTower!.Position = eventMouseMotion.Position;
 				PlacementTower.QueueRedraw();
 			}
@@ -70,41 +93,20 @@ public partial class ruined_shrine : Node2D
 	public override void _Process(double delta)
 	{
 		FPSLabel!.Text = $"{Engine.GetFramesPerSecond()} FPS";
-		if (!GameOver && LastSpawn.AddMilliseconds(GD.RandRange(SpawnRate, SpawnRate + (SpawnRate * 0.25))) < DateTime.Now)
-		{
-			var creepBase = ResourceLoader.Load<PackedScene>("res://scenes/entities/creep.tscn");
-			var newCreep = CreepBase.Instantiate<creep>();
-			newCreep.Connect("navigation_finished",new Callable(this,"CreepLeaked"));
-			newCreep.Connect("died",new Callable(this,"CreepKilled"));
-
-			AddChild(newCreep);
-
-			newCreep.GlobalPosition = StartPos;
-			newCreep.SetNavigationPosition(EndPos);
-
-			// 500, 450
-			LastSpawn = DateTime.Now;
-		}
-	}
-
-	public void CreepKilled(creep creep)
-	{
-		Gold += (int)((creep.MaxHealth / 10) * RNG.RandfRange(1.1f, 1.3f));
-		GoldLabel!.Text = $"{Gold} Gold";
+		WaveManager?.Update();
+		GoldLabel!.Text = $"{WaveManager?.Gold.ToString(0)} Gold";
+		WaveLabel!.Text = $"Wave {WaveManager?.WaveNumber}";
+		if (WaveManager?.NextWaveTime != default(DateTime))
+			CountdownLabel!.Text = $"{(WaveManager?.NextWaveTime - DateTime.Now)}";
 		
-		GoldLabel!.QueueRedraw();
-	}
-
-	public void CreepLeaked()
-	{
-		HealthBar!.Value -= 10;
-
+		HealthBar!.Value = WaveManager!.Health;
 		if (HealthBar?.Value <= 0)
 		{
 			if (!GameOver)
 			{
 				GameOver = true;
-				var go = GameOverScene.Instantiate<Label>();
+				WaveManager!.Died();
+				var go = ResourceManager.NewGameOverLabel();
 				go.SetPosition((GetViewportRect().Size / 2) - (go.Size / 2));
 				AddChild(go);
 			}

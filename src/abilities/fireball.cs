@@ -19,8 +19,8 @@ public partial class Fireball : Castable
 	public projectile SpawnProjectile(Vector2 position)
 	{
 		var proj = ResourceManager.NewFireball();
-		proj.RemainingForks = 3;
-		//proj.RemainingChains = 1;
+		proj.RemainingForks = 1;
+		proj.RemainingChains = 1;
 		proj.SpawnProjectileCallback = SpawnProjectile;
 		proj.GlobalPosition = position;
 		turret.CallDeferred("AddChildAtPosition", proj, position);

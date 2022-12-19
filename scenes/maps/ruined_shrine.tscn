@@ -1,7 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://bbypj10ux7652"]
+[gd_scene load_steps=6 format=3 uid="uid://bbypj10ux7652"]
 
 [ext_resource type="Script" path="res://src/ruined_shrine.cs" id="2"]
-[ext_resource type="PackedScene" uid="uid://b4xoi64awetcp" path="res://scenes/entities/turret.tscn" id="3"]
 [ext_resource type="Texture2D" uid="uid://ctyuvxxnwaqu8" path="res://assets/towerDefense_vector.svg" id="4_0omem"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_45w8u"]
@@ -350,18 +349,3 @@ position = Vector2(1010, 161)
 
 [node name="End Point" type="Node2D" parent="."]
 position = Vector2(1003, 862)
-
-[node name="Simple Turret" parent="." instance=ExtResource("3")]
-position = Vector2(795, 431)
-Cooldown = 50.0
-Damage = 5.0
-Targeting = 2
-
-[node name="Turret" parent="." instance=ExtResource("3")]
-position = Vector2(641, 259)
-Targeting = 2
-
-[node name="Turret2" parent="." instance=ExtResource("3")]
-position = Vector2(848, 211)
-Damage = 5.0
-Targeting = 5

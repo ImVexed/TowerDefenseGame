@@ -4,7 +4,7 @@ using System;
 public partial class creep : CharacterBody2D
 {
 	public Resistances Resistances = new Resistances();
-	public BigRational MaxHealth = 1000;
+	public BigRational MaxHealth = 151;
 	public BigRational Health;
 	[Export] float MovementMultiplier = 100;
 	[Export] float NavRadius = 0;
@@ -12,10 +12,10 @@ public partial class creep : CharacterBody2D
 	[Export] bool NavOptimize = true;
 
 	[Signal]
-	public delegate void navigation_finishedEventHandler();
+	public delegate void CreepNavigationFinishedEventHandler(creep creep);
 
 	[Signal]
-	public delegate void diedEventHandler(creep creep);
+	public delegate void DiedEventHandler(creep creep);
 
 	NavigationAgent2D? nav;
 
@@ -26,6 +26,9 @@ public partial class creep : CharacterBody2D
 
 	Label? HealthBar;
 
+	public event CreepNavigationFinishedEventHandler? Leaked;
+	public event DiedEventHandler? Killed;
+
 	PackedScene DamageText = ResourceLoader.Load<PackedScene>("res://scenes/gui/damage_number.tscn");
 
 	// Called when the node enters the scene tree for the first time.
@@ -34,10 +37,10 @@ public partial class creep : CharacterBody2D
 		Health = MaxHealth;
 		HealthBar = GetNode<Label>("Health");
 		nav = GetNode<NavigationAgent2D>("NavigationAgent2D");
-	// TODO: nav.Connect("path_changed",new Callable(this,"PathChanged")); 
-	// TODO: nav.Connect("target_reached",new Callable(this,"TargetReached"));
-		nav.Connect("navigation_finished",new Callable(this,"NavigationFinished"));
-		nav.Connect("velocity_computed",new Callable(this,"VelocityComputed"));
+		// TODO: nav.Connect("path_changed",new Callable(this,"PathChanged")); 
+		// TODO: nav.Connect("target_reached",new Callable(this,"TargetReached"));
+		nav.Connect("navigation_finished", new Callable(this, "NavigationFinished"));
+		nav.Connect("velocity_computed", new Callable(this, "VelocityComputed"));
 		nav.MaxSpeed = MovementMultiplier;
 		nav.Radius = NavRadius;
 		nav.AvoidanceEnabled = NavAvoidance;
@@ -70,7 +73,8 @@ public partial class creep : CharacterBody2D
 
 	public void NavigationFinished()
 	{
-		EmitSignal("navigation_finished");
+		Leaked?.Invoke(this);
+		CallDeferred("queue_free");
 	}
 
 	public void TakeDamage(Damage damage)
@@ -79,9 +83,10 @@ public partial class creep : CharacterBody2D
 
 		Health -= damage;
 
-		if (Health <= 0) {
+		if (Health <= 0)
+		{
 			QueueFree();
-			EmitSignal("died", this);
+			Killed?.Invoke(this);
 			return;
 		}
 
@@ -95,6 +100,6 @@ public partial class creep : CharacterBody2D
 
 	public override void _Draw()
 	{
-		HealthBar!.Text = $"{Health}/{MaxHealth}";
+		HealthBar!.Text = $"{Health.ToString(0)}/{MaxHealth.ToString(0)}";
 	}
 }
