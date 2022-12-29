@@ -1,24 +1,34 @@
-[gd_scene load_steps=4 format=3 uid="uid://b4xoi64awetcp"]
+[gd_scene load_steps=5 format=3 uid="uid://b4xoi64awetcp"]
 
-[ext_resource type="Script" path="res://src/Turret.cs" id="1"]
+[ext_resource type="Script" path="res://src/turret.cs" id="1_vo8xt"]
 [ext_resource type="Texture2D" uid="uid://b5qsbldb8a4g7" path="res://assets/turrets/Tower.png" id="2"]
 
 [sub_resource type="CircleShape2D" id="1"]
 radius = 504.504
 
-[node name="Turret" type="Node2D"]
-script = ExtResource("1")
+[sub_resource type="CircleShape2D" id="CircleShape2D_cpq11"]
+radius = 33.0
+
+[node name="turret" type="Node2D"]
+script = ExtResource("1_vo8xt")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(-6.10352e-05, 0)
 scale = Vector2(0.261752, 0.248932)
 texture = ExtResource("2")
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="RangeArea" type="Area2D" parent="."]
 position = Vector2(628, 332)
 scale = Vector2(0.261752, 0.248932)
 collision_layer = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RangeArea"]
 position = Vector2(-2399.22, -1333.7)
 shape = SubResource("1")
+
+[node name="PlacementArea" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlacementArea"]
+shape = SubResource("CircleShape2D_cpq11")

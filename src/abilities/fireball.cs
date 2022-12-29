@@ -9,9 +9,9 @@ public partial class Fireball : Castable
 		get { return 500; }
 	}
 
-	Turret turret;
+	turret turret;
 
-	public Fireball(Turret turret)
+	public Fireball(turret turret)
 	{
 		this.turret = turret;
 	}

@@ -17,7 +17,7 @@ public partial class ruined_shrine : Node2D
 	Label? CountdownLabel;
 
 	bool ActivelyPlacingTower = false;
-	Turret? PlacementTower;
+	turret? PlacementTower;
 
 	WaveManager? WaveManager;
 
@@ -33,10 +33,11 @@ public partial class ruined_shrine : Node2D
 		GoldLabel = GetNode<Label>("../UI/Gold");
 		CountdownLabel = GetNode<Label>("../UI/Countdown");
 		BasicTowerButton = GetNode<TextureButton>("../UI/BasicTower");
-		BasicTowerButton.Connect("pressed", new Callable(this, "TowerButtonPressed"));
+		BasicTowerButton.Pressed += TowerButtonPressed;
 		PauseButton = GetNode<TextureButton>("../UI/Pause");
-		PauseButton.Connect("pressed", new Callable(this, "PauseButtonPressed"));
+		PauseButton.Pressed += PauseButtonPressed;
 		WaveManager = new WaveManager(Diffuculty.Medium, this, StartPos, EndPos);
+		HealthBar!.MaxValue = WaveManager!.Health;
 	}
 
 	public void TowerButtonPressed()
@@ -49,7 +50,6 @@ public partial class ruined_shrine : Node2D
 		ActivelyPlacingTower = true;
 		PlacementTower = ResourceManager.NewTower();
 		PlacementTower.Position = GetGlobalMousePosition();
-		PlacementTower.Active = false;
 
 		AddChild(PlacementTower);
 	}
@@ -73,11 +73,11 @@ public partial class ruined_shrine : Node2D
 	{
 		if (ActivelyPlacingTower)
 		{
-			if (@event is InputEventMouseButton eventMouseButton)
+			if (@event is InputEventMouseButton eventMouseButton && PlacementTower!.PlacementValid)
 			{
 				PlacementTower!.Position = eventMouseButton.Position;
+				PlacementTower.Placed = true;
 				PlacementTower.QueueRedraw();
-				PlacementTower.Active = true;
 				PlacementTower = null;
 				ActivelyPlacingTower = false;
 			}
@@ -100,6 +100,7 @@ public partial class ruined_shrine : Node2D
 			CountdownLabel!.Text = $"{(WaveManager?.NextWaveTime - DateTime.Now)}";
 		
 		HealthBar!.Value = WaveManager!.Health;
+		
 		if (HealthBar?.Value <= 0)
 		{
 			if (!GameOver)

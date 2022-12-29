@@ -39,8 +39,10 @@ public partial class creep : CharacterBody2D
 		nav = GetNode<NavigationAgent2D>("NavigationAgent2D");
 		// TODO: nav.Connect("path_changed",new Callable(this,"PathChanged")); 
 		// TODO: nav.Connect("target_reached",new Callable(this,"TargetReached"));
-		nav.Connect("navigation_finished", new Callable(this, "NavigationFinished"));
-		nav.Connect("velocity_computed", new Callable(this, "VelocityComputed"));
+
+		nav.NavigationFinished += NavigationFinished;
+		nav.VelocityComputed += VelocityComputed;
+
 		nav.MaxSpeed = MovementMultiplier;
 		nav.Radius = NavRadius;
 		nav.AvoidanceEnabled = NavAvoidance;

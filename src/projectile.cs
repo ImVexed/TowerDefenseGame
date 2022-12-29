@@ -21,7 +21,7 @@ public partial class projectile : Area2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		GetNode<VisibleOnScreenNotifier2D>("VisibleOnScreenNotifier2D").Connect("screen_exited", new Callable(this, "OnViewportExit"));
+		GetNode<VisibleOnScreenNotifier2D>("VisibleOnScreenNotifier2D").ScreenExited += OnViewportExit;
 		Connect("body_entered", new Callable(this, "BodyEntered"));
 		ChainArea = GetNode<Area2D>("ChainArea2D");
 	}

@@ -1,7 +1,7 @@
 using Godot;
 #nullable enable
 
-public partial class Turret : Node2D
+public partial class turret : Node2D
 {
 
 	[Flags]
@@ -18,7 +18,9 @@ public partial class Turret : Node2D
 	[Export] float Cooldown = 100;
 	[Export] float Damage = 10;
 
-	[Export] public bool Active = true;
+	[Export] public bool Placed = false;
+	[Export] public bool PlacementValid = true;
+	Area2D? PlacementArea;
 
 	List<creep> Targets = new();
 
@@ -30,22 +32,31 @@ public partial class Turret : Node2D
 	[Export(PropertyHint.Enum, nameof(TargetingType))]
 	public TargetingType Targeting = TargetingType.First;
 
-	public Turret()
+
+
+	public turret()
 	{
 		Spell = (new Fireball(this)) as Castable;
 	}
 
 	public override void _Ready()
 	{
-		var area = GetNode<Area2D>("Area2D");
+		PlacementArea = GetNode<Area2D>("PlacementArea");
+		var area = GetNode<Area2D>("RangeArea");
 
-		area.Connect("body_entered", new Callable(this, "BodyEntered"));
-		area.Connect("body_exited", new Callable(this, "BodyExited"));
+		area.BodyEntered += RangeEntered;
+		area.BodyExited += RangeExited;
+
+		PlacementArea.BodyEntered += PlacementEntered;
+		PlacementArea.BodyExited += PlacementExited;
+		PlacementArea.AreaEntered += PlacementEntered;
+		PlacementArea.AreaExited += PlacementExited;
+
 	}
 
 	public override void _Process(double delta)
 	{
-		if (!Active)
+		if (!Placed)
 			return;
 
 		UpdateTarget();
@@ -87,8 +98,8 @@ public partial class Turret : Node2D
 
 	public override void _Draw()
 	{
-		if (Target != null)
-			DrawLine(new Vector2(0, 0), Target.Position - Position, Color.Color8(255, 0, 0));
+		// if (Target != null)
+		// 	DrawLine(new Vector2(0, 0), Target.Position - Position, Color.Color8(255, 0, 0));
 	}
 
 	public void AddChildAtPosition(Node2D child, Vector2 position)
@@ -97,22 +108,16 @@ public partial class Turret : Node2D
 		child.GlobalPosition = position;
 	}
 
-	private void BodyEntered(Node body)
+	private void RangeEntered(Node body)
 	{
-		if (body is not creep)
-			return;
-
 		var s = (creep)body;
 
 		Targets.Add(s);
 		UpdateTarget();
 	}
 
-	private void BodyExited(Node body)
+	private void RangeExited(Node body)
 	{
-		if (body is not creep)
-			return;
-
 		var s = (creep)body;
 
 		if (s == Target)
@@ -121,6 +126,25 @@ public partial class Turret : Node2D
 
 		Targets.Remove(s);
 		UpdateTarget();
+	}
+
+	private void PlacementEntered(Node body)
+	{
+		if (Placed)
+			return;
+
+		PlacementValid = false;
+		Modulate = new Color(1, 0, 0);
+	}
+	
+	private void PlacementExited(Node body)
+	{
+		if (Placed)
+			return;
+			
+		PlacementValid = !PlacementArea!.HasOverlappingBodies() && !PlacementArea.HasOverlappingAreas();
+		if (PlacementValid)
+			Modulate = new Color(1, 1, 1);
 	}
 
 	private void UpdateTarget()

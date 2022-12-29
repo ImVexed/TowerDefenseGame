@@ -54,6 +54,7 @@ click={
 
 2d_physics/layer_1="creep"
 2d_physics/layer_2="turret radius"
+2d_physics/layer_3="terrain"
 
 [rendering]
 

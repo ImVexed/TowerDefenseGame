@@ -12,8 +12,7 @@ public partial class explosion : Area2D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		Connect("body_entered", new Callable(this, "BodyEntered"));
-		GetNode("AnimatedSprite2D").Connect("animation_finished", new Callable(this, "OnAnimationFinished"));
+		GetNode<AnimatedSprite2D>("AnimatedSprite2D").AnimationFinished += OnAnimationFinished;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
